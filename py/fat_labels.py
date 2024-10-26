@@ -5,21 +5,26 @@ from PIL import Image, ImageDraw, ImageFont
 import torch
 import numpy as np
 
+import random
 import folder_paths
-from nodes import PreviewImage
+# from nodes import PreviewImage
 
 RESOURCES_DIR = os.path.join(Path(__file__).parent, "")
 
 
-class FatLabels2(PreviewImage):
-    def __init__(self, device="cpu"):
-        self.device = device
+class FatLabels2:
+    def __init__(self):
+        self.device = "cpu"
+        self.output_dir = folder_paths.get_temp_directory()
+        self.type = "temp"
+        self.prefix_append = "_temp_" + ''.join(random.choice("abcdefghijklmnopqrstupvxyz") for x in range(5))
+        self.compress_level = 1
 
     @classmethod
     def INPUT_TYPES(cls):
 
-        input_dir = folder_paths.get_input_directory()
-        files = [f for f in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, f))]
+        # input_dir = folder_paths.get_input_directory()
+        # files = [f for f in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, f))]
         return {
             "required": {
                 "text": ("STRING", {"multiline": True, "default1": "Hello", "forceInput": True}),
@@ -27,14 +32,15 @@ class FatLabels2(PreviewImage):
             },
             "optional": {
                 "font_path": ("STRING", {"image_upload": True}),
-            }
+            },
+            "hidden": {"prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"},
         }
 
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "create_fat_label_with_cv2"
     CATEGORY = "simpleTool_clh"
 
-    def create_fat_label_with_cv2(self, text, font_size, font_path):
+    def create_fat_label_with_cv2(self, text, font_size, font_path, prompt=None, extra_pnginfo=None):
         # app.graph.title = text
         # Create a blank grayscale image as canvas with a fixed background color
         bg_color = 0  # Black background (grayscale)
@@ -47,7 +53,7 @@ class FatLabels2(PreviewImage):
         canvas_width = text_width + 40  # Add 20px padding on each side
         canvas_height = text_height + 40  # Add 20px padding on each side
 
-        canvas = Image.new("L", (canvas_width + 40, canvas_height), bg_color)
+        canvas = Image.new("L", (canvas_width, canvas_height), bg_color)
 
         # Font color is always white
         font_color = 255  # White (grayscale)
@@ -68,16 +74,17 @@ class FatLabels2(PreviewImage):
         # Convert the image to a PyTorch tensor
         data = np.array(canvas)
         # tensor_data = torch.tensor(data, dtype=torch.float32)
-        tensor_data = data.astype(np.float32) / 255.0  # 先确保NumPy数组是float32
-        tensor_data = torch.as_tensor(tensor_data, dtype=torch.float32)
+        astype_data = data.astype(np.float32) / 255.0  # 先确保NumPy数组是float32
+        tensor_data = torch.as_tensor(astype_data, dtype=torch.float32)
         image_tensor_out = tensor_data.unsqueeze(0)
 
         # image_tensor_out = torch.from_numpy(data.astype(np.float32) / 255.0).unsqueeze(0)
+        results = list()
         return {
             "result": (image_tensor_out,),
             "ui": {
                 "text": ['1234'],
-                "images": (image_tensor_out,),
+                # "images": (data,),
             }
         }
 
