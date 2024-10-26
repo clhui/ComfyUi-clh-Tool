@@ -4,8 +4,6 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 import torch
 import numpy as np
-from imageio.plugins._tifffile import unicode
-from typer.cli import app
 
 import folder_paths
 
