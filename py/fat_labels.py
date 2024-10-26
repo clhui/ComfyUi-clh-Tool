@@ -12,7 +12,7 @@ from nodes import PreviewImage
 RESOURCES_DIR = os.path.join(Path(__file__).parent, "")
 
 
-class FatLabels2:
+class String2FatLabels:
     def __init__(self):
         self.device = "cpu"
         self.output_dir = folder_paths.get_temp_directory()
@@ -87,7 +87,6 @@ class FatLabels2:
         return {
             "result": (image_tensor_out,),
             "ui": {
-                "text": ['1234'],
                 "images": image_results,
             }
         }
@@ -109,12 +108,26 @@ class FatLabels2:
         text_width, text_height = right, bottom
         return text_width, text_height
 
+class String2ImgFatLabels(String2FatLabels):
+
+    FUNCTION = "create_image_with_cv2"
+
+
+    def create_image_with_cv2(self, text, font_size, font_path, prompt=None, extra_pnginfo=None):
+        image_tensor_out = self.create_fat_label_with_cv2(text, font_size, font_path, prompt, extra_pnginfo)["result"]
+        return {
+            "result": (image_tensor_out,),
+            "ui": {
+            }
+        }
 
 NODE_CLASS_MAPPINGS = {
-    "FatLabels_clh": FatLabels2,
+    "String2FatLabels_clh": String2FatLabels,
+    "String2ImgFatLabels_clh": String2ImgFatLabels,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "FatLabels_clh": "FatLabels_clh",
+    "String2FatLabels_clh": "String To ImageAndShow",
+    "String2Img_clh": "String To Image",
 
 }

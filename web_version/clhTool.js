@@ -140,7 +140,23 @@ app.registerExtension({
                 }
 				break;
 
-			case "FatLabels_clh":
+			case "String2ImgFatLabels_clh":
+				const FatLabelsCreated = nodeType.prototype.onNodeCreated || function() {};
+
+				nodeType.prototype.onNodeCreated = function () {
+					FatLabelsCreated.apply(this, arguments);
+
+					this.inputs_offset = nodeData.name.includes("selective") ? 1 : 0;
+                    //添加小组件（组件类型，组件名，组件）
+					this.addWidget("image", "select Font Path", null, (value) => {
+					    const font_path_widgets = this.widgets.find(w => w.name === "font_path");
+                        font_path_widgets.value = value
+
+					});
+
+				}
+				break;
+			case "String2FatLabels_clh":
 				const FatLabelsCreated = nodeType.prototype.onNodeCreated || function() {};
 
 				nodeType.prototype.onNodeCreated = function () {
