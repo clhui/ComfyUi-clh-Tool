@@ -140,7 +140,7 @@ app.registerExtension({
                 }
 				break;
 
-			case "JoinStringMulti_clh":
+			case "FatLabels_clh":
 				const JoinStringMultiCreated = nodeType.prototype.onNodeCreated || function() {};
 
 				nodeType.prototype.onNodeCreated = function () {
