@@ -6,11 +6,12 @@ import torch
 import numpy as np
 
 import folder_paths
+from nodes import PreviewImage
 
 RESOURCES_DIR = os.path.join(Path(__file__).parent, "")
 
 
-class FatLabels2:
+class FatLabels2(PreviewImage):
     def __init__(self, device="cpu"):
         self.device = device
 
@@ -72,7 +73,13 @@ class FatLabels2:
         image_tensor_out = tensor_data.unsqueeze(0)
 
         # image_tensor_out = torch.from_numpy(data.astype(np.float32) / 255.0).unsqueeze(0)
-        return (image_tensor_out,)
+        return {
+            "result": (image_tensor_out,),
+            "ui": {
+                "text": ['1234'],
+                "images": (image_tensor_out,),
+            }
+        }
 
     @staticmethod
     def get_font(font_size, font_path=None):
