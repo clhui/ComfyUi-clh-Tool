@@ -15,6 +15,13 @@ Simply search for Fat or Labels, or yes... that's right  FatLabels node, once it
 ![Screenshot of some FatLabels used to help label up a complex workflow.](https://aianimation.com/wp-content/uploads/2023/10/FatLabels-for-Comfy-UI-image-.jpg)
 
 
+
+https://github.com/user-attachments/assets/efaf6eda-9a37-4317-9a07-8addc1799102
+![image](https://github.com/user-attachments/assets/5d7e834a-b311-4d2b-a786-64232d6d3e30)
+
+
+![image](https://github.com/user-attachments/assets/abd4416c-c1a7-40b6-a7e5-75d4bf35e66c)
+
 If I get time, I'll explore adding extra font option, colours etc.
 
 We'll see.
