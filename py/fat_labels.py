@@ -79,7 +79,7 @@ class FatLabels2:
     @staticmethod
     def get_font(font_size, font_path=None):
         if font_path is None or len(font_path) == 0:
-            font_path = str(Path(os.path.join(RESOURCES_DIR, '../font/JingDongLangZhengTi.ttf')))
+            font_path = str(Path(os.path.join(RESOURCES_DIR, '../font/simhei.ttf')))
         elif font_path.startswith("./"):
             font_path = str(Path(os.path.join(RESOURCES_DIR, font_path)))
         return ImageFont.truetype(font_path, font_size)
