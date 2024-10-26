@@ -7,7 +7,7 @@ import numpy as np
 
 import random
 import folder_paths
-# from nodes import PreviewImage
+from nodes import PreviewImage
 
 RESOURCES_DIR = os.path.join(Path(__file__).parent, "")
 
@@ -79,12 +79,16 @@ class FatLabels2:
         image_tensor_out = tensor_data.unsqueeze(0)
 
         # image_tensor_out = torch.from_numpy(data.astype(np.float32) / 255.0).unsqueeze(0)
-        results = list()
+        image_results = list()
+        if image_tensor_out is not None:
+            saved = self.save_images(image_tensor_out, "clhTool/i", prompt, extra_pnginfo)
+            image = saved["ui"]["images"][0]
+            image_results.append(image)
         return {
             "result": (image_tensor_out,),
             "ui": {
                 "text": ['1234'],
-                # "images": (data,),
+                "images": image_results,
             }
         }
 

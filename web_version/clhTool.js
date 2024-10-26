@@ -148,7 +148,7 @@ app.registerExtension({
 
 					this.inputs_offset = nodeData.name.includes("selective") ? 1 : 0;
                     //添加小组件（组件类型，组件名，组件）
-					this.addWidget("IMAGEUPLOAD", "select Font Path", null, (value) => {
+					this.addWidget("image", "select Font Path", null, (value) => {
 					    const font_path_widgets = this.widgets.find(w => w.name === "font_path");
                         font_path_widgets.value = value
 
