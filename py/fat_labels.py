@@ -26,7 +26,7 @@ class FatLabels2(PreviewImage):
                 "font_size": ("INT", {"default": 36, "min": 1}),  # Font size in pixels
             },
             "optional": {
-                "font_path": ("STRING", {"image_upload": True})
+                "font_path": ("STRING", {"image_upload": True}),
             }
         }
 
