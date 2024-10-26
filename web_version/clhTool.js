@@ -148,11 +148,11 @@ app.registerExtension({
 
 					this.inputs_offset = nodeData.name.includes("selective") ? 1 : 0;
                     //添加小组件（组件类型，组件名，组件）
-					this.addWidget("image", "select Font Path", null, (value) => {
-					    const font_path_widgets = this.widgets.find(w => w.name === "font_path");
-                        font_path_widgets.value = value
-
-					});
+//					this.addWidget("image", "select Font Path", null, (value) => {
+//					    const font_path_widgets = this.widgets.find(w => w.name === "font_path");
+//                        font_path_widgets.value = value
+//
+//					});
 
 				}
 				break;
@@ -164,11 +164,11 @@ app.registerExtension({
 
 					this.inputs_offset = nodeData.name.includes("selective") ? 1 : 0;
                     //添加小组件（组件类型，组件名，组件）
-					this.addWidget("combo", "select Font Path", null, (value) => {
-					    const font_path_widgets = this.widgets.find(w => w.name === "font_path");
-                        font_path_widgets.value = value
-
-					});
+//					this.addWidget("button", "select Font Path", null, (value) => {
+//					    const font_path_widgets = this.widgets.find(w => w.name === "font_path");
+//                        font_path_widgets.value = value
+//
+//					});
 
 				}
 				break;
