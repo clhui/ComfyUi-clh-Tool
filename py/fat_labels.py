@@ -12,9 +12,9 @@ from nodes import PreviewImage
 RESOURCES_DIR = os.path.join(Path(__file__).parent, "")
 
 
-class String2FatLabels:
+class String2FatLabels(PreviewImage):
     def __init__(self):
-        self.device = "cpu"
+        # self.device = "cpu"
         self.output_dir = folder_paths.get_temp_directory()
         self.type = "temp"
         self.prefix_append = "_temp_" + ''.join(random.choice("abcdefghijklmnopqrstupvxyz") for x in range(5))
@@ -108,7 +108,7 @@ class String2FatLabels:
         text_width, text_height = right, bottom
         return text_width, text_height
 
-class String2ImgFatLabels(String2FatLabels):
+class String2Image(String2FatLabels):
 
     FUNCTION = "create_image_with_cv2"
 
@@ -116,18 +116,18 @@ class String2ImgFatLabels(String2FatLabels):
     def create_image_with_cv2(self, text, font_size, font_path, prompt=None, extra_pnginfo=None):
         image_tensor_out = self.create_fat_label_with_cv2(text, font_size, font_path, prompt, extra_pnginfo)["result"]
         return {
-            "result": (image_tensor_out,),
+            "result": image_tensor_out,
             "ui": {
             }
         }
 
 NODE_CLASS_MAPPINGS = {
     "String2FatLabels_clh": String2FatLabels,
-    "String2ImgFatLabels_clh": String2ImgFatLabels,
+    "String2Image_clh": String2Image,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "String2FatLabels_clh": "String To ImageAndShow",
-    "String2Img_clh": "String To Image",
+    "String2FatLabels_clh": "StringToImageAndShow，big title",
+    "String2Image_clh": "String To Image",
 
 }
