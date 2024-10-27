@@ -1,0 +1,7 @@
+# 默认忽略的文件
+/shelf/
+/workspace.xml
+/ComfyUi-clh-Tool.iml
+/misc.xml
+/modules.xml
+/inspectionProfiles/profiles_settings.xml
