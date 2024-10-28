@@ -1,3 +1,9 @@
+"""
+@author: Dr.Lt.Data
+@title: CLH simple Tool
+@nickname: CLH Simple Tool
+@description: This extension offers various detector nodes and detailer nodes that allow you to configure a workflow that automatically enhances facial details. And provide iterative upscaler.
+"""
 import importlib
 
 node_list = [
