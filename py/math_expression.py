@@ -295,7 +295,7 @@ class MathExpression_clh:
         lookup = initial_values
         return {
             "ui": {"value": [r]},
-            "result": (int(r), float(r),str(r),),
+            "result": (int(r), float(r),[str(r)],),
         }
 
 
