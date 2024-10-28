@@ -27,8 +27,3 @@ If I get time, I'll explore adding extra font option, colours etc.
 
 We'll see.
 
-Cheers
-
-Jon D
-from aianimation.com
-
