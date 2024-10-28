@@ -162,7 +162,7 @@ class MathExpression_clh:
             inputs["optional"]["param%d" % i] = (any, {"default": 0})
         return inputs
 
-    RETURN_TYPES = ("INT", "FLOAT",)
+    RETURN_TYPES = ("INT", "FLOAT","STRING",)
     FUNCTION = "evaluate"
     CATEGORY = "simpleTool_clh"
     OUTPUT_NODE = True
@@ -295,7 +295,7 @@ class MathExpression_clh:
         lookup = initial_values
         return {
             "ui": {"value": [r]},
-            "result": (int(r), float(r),),
+            "result": (int(r), float(r),str(r),),
         }
 
 
