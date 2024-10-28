@@ -4,38 +4,43 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 import torch
 import numpy as np
-from imageio.plugins._tifffile import unicode
-from typer.cli import app
 
+import random
 import folder_paths
+from nodes import PreviewImage
 
 RESOURCES_DIR = os.path.join(Path(__file__).parent, "")
 
 
-class FatLabels2:
-    def __init__(self, device="cpu"):
-        self.device = device
+class String2FatLabels(PreviewImage):
+    def __init__(self):
+        # self.device = "cpu"
+        self.output_dir = folder_paths.get_temp_directory()
+        self.type = "temp"
+        self.prefix_append = "_temp_" + ''.join(random.choice("abcdefghijklmnopqrstupvxyz") for x in range(5))
+        self.compress_level = 1
 
     @classmethod
     def INPUT_TYPES(cls):
 
-        input_dir = folder_paths.get_input_directory()
-        files = [f for f in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, f))]
+        # input_dir = folder_paths.get_input_directory()
+        # files = [f for f in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, f))]
         return {
             "required": {
                 "text": ("STRING", {"multiline": True, "default1": "Hello", "forceInput": True}),
                 "font_size": ("INT", {"default": 36, "min": 1}),  # Font size in pixels
             },
             "optional": {
-                "font_path": ("STRING", {"image_upload": True})
-            }
+                "font_path": ("STRING", {"image_upload": True}),
+            },
+            "hidden": {"prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"},
         }
 
     RETURN_TYPES = ("IMAGE",)
     FUNCTION = "create_fat_label_with_cv2"
     CATEGORY = "simpleTool_clh"
 
-    def create_fat_label_with_cv2(self, text, font_size, font_path):
+    def create_fat_label_with_cv2(self, text, font_size, font_path, prompt=None, extra_pnginfo=None):
         # app.graph.title = text
         # Create a blank grayscale image as canvas with a fixed background color
         bg_color = 0  # Black background (grayscale)
@@ -48,7 +53,7 @@ class FatLabels2:
         canvas_width = text_width + 40  # Add 20px padding on each side
         canvas_height = text_height + 40  # Add 20px padding on each side
 
-        canvas = Image.new("L", (canvas_width + 40, canvas_height), bg_color)
+        canvas = Image.new("L", (canvas_width, canvas_height), bg_color)
 
         # Font color is always white
         font_color = 255  # White (grayscale)
@@ -69,17 +74,27 @@ class FatLabels2:
         # Convert the image to a PyTorch tensor
         data = np.array(canvas)
         # tensor_data = torch.tensor(data, dtype=torch.float32)
-        tensor_data = data.astype(np.float32) / 255.0  # 先确保NumPy数组是float32
-        tensor_data = torch.as_tensor(tensor_data, dtype=torch.float32)
+        astype_data = data.astype(np.float32) / 255.0  # 先确保NumPy数组是float32
+        tensor_data = torch.as_tensor(astype_data, dtype=torch.float32)
         image_tensor_out = tensor_data.unsqueeze(0)
 
         # image_tensor_out = torch.from_numpy(data.astype(np.float32) / 255.0).unsqueeze(0)
-        return (image_tensor_out,)
+        image_results = list()
+        if image_tensor_out is not None:
+            saved = self.save_images(image_tensor_out, "clhTool/i", prompt, extra_pnginfo)
+            image = saved["ui"]["images"][0]
+            image_results.append(image)
+        return {
+            "result": (image_tensor_out,),
+            "ui": {
+                "images": image_results,
+            }
+        }
 
     @staticmethod
     def get_font(font_size, font_path=None):
         if font_path is None or len(font_path) == 0:
-            font_path = str(Path(os.path.join(RESOURCES_DIR, '../font/JingDongLangZhengTi.ttf')))
+            font_path = str(Path(os.path.join(RESOURCES_DIR, '../font/simhei.ttf')))
         elif font_path.startswith("./"):
             font_path = str(Path(os.path.join(RESOURCES_DIR, font_path)))
         return ImageFont.truetype(font_path, font_size)
@@ -93,12 +108,26 @@ class FatLabels2:
         text_width, text_height = right, bottom
         return text_width, text_height
 
+class String2Image(String2FatLabels):
+
+    FUNCTION = "create_image_with_cv2"
+
+
+    def create_image_with_cv2(self, text, font_size, font_path, prompt=None, extra_pnginfo=None):
+        image_tensor_out = self.create_fat_label_with_cv2(text, font_size, font_path, prompt, extra_pnginfo)["result"]
+        return {
+            "result": image_tensor_out,
+            "ui": {
+            }
+        }
 
 NODE_CLASS_MAPPINGS = {
-    "FatLabels_clh": FatLabels2,
+    "String2FatLabels_clh": String2FatLabels,
+    "String2Image_clh": String2Image,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "FatLabels_clh": "FatLabels_clh",
+    "String2FatLabels_clh": "StringToImageAndShow，big title",
+    "String2Image_clh": "String To Image",
 
 }
