@@ -36,7 +36,7 @@ class String2FatLabels(PreviewImage):
             "hidden": {"prompt": "PROMPT", "extra_pnginfo": "EXTRA_PNGINFO"},
         }
 
-    RETURN_TYPES = ("IMAGE",)
+    RETURN_TYPES = ("IMAGE","STRING",)
     FUNCTION = "create_fat_label_with_cv2"
     CATEGORY = "simpleTool_clh"
 
@@ -85,7 +85,7 @@ class String2FatLabels(PreviewImage):
             image = saved["ui"]["images"][0]
             image_results.append(image)
         return {
-            "result": (image_tensor_out,),
+            "result": (image_tensor_out,text,),
             "ui": {
                 "images": image_results,
             }
