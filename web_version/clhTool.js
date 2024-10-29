@@ -85,8 +85,11 @@ app.registerExtension({
 					let values = message["value"].toString().split('x');
 					const result_to_label = this.widgets.find(w => w.name === "result_to_label")["value"];
 					if(result_to_label){
-						this.title = "result：" + values;
+						this.title = result_to_label+ "：" + values;
 					}
+					if (typeof string!== "undefined" && string!== null && string!== "") {
+                        console.log("字符串不是空的，也不是 null");
+                    }
 					return r
 				}
 				break;

@@ -46,7 +46,7 @@ class String2FatLabels(PreviewImage):
         bg_color = 0  # Black background (grayscale)
         # text = text.encode("utf-8")
 
-        line_spacing = 10  # 行间距为 10 像素
+        line_spacing = int(font_size * 50 / 100)  # 行间距为 10 像素
         # Create a drawing context to calculate text size
         text_width, text_height = self.calculate_text_size(text, font_size,line_spacing, font_path)
 
@@ -70,7 +70,7 @@ class String2FatLabels(PreviewImage):
         y = (canvas_height - text_height) // 2
 
         # Draw text on the image with the specified font size
-        draw.text((x, y), text, fill=font_color, font=font, align=ImageDraw.ALIGN_LEFT, spacing=line_spacing)
+        draw.text((x, y), text, fill=font_color, font=font,  spacing=line_spacing)
 
         # Convert the image to a PyTorch tensor
         data = np.array(canvas)
@@ -105,7 +105,7 @@ class String2FatLabels(PreviewImage):
         canvas = Image.new("L", (1, 1), 0)  # Create a blank 1x1 grayscale image
         draw = ImageDraw.Draw(canvas)
         font = self.get_font(font_size, font_path)
-        left, top, right, bottom = draw.textbbox((0, 0), text, font, align=ImageDraw.ALIGN_LEFT, spacing=line_spacing)
+        left, top, right, bottom = draw.textbbox((0, 0), text, font,  spacing=line_spacing)
         text_width, text_height = right, bottom
         return text_width, text_height
 
