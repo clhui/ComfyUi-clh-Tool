@@ -151,7 +151,7 @@ class MathExpression_clh:
                 # "b": (any,),
                 # "c": (any, ),
                 # "initial_value%d" % i: (any, {"rawLink": True,"lazy": True}) for i in range(1, MAX_FLOW_NUM)
-                "result_to_label": ("STRING", {"forceInput": True,"title": "结果放到标题"}),
+                "result_to_label": ("STRING", {"forceInput": False,"title": "结果放到标题"}),
             },
             "hidden": {
                 "extra_pnginfo": "EXTRA_PNGINFO",
