@@ -145,6 +145,7 @@ class MathExpression_clh:
                     "default": "aram0+param1+param2",
                     "height": 40
                 }}),
+<<<<<<< HEAD:pyth/math_expression.py
                 "expression2": ("STRING", {"multiline": True, "dynamicPrompts": False, "pysssss.autocomplete": {
                     "words": autocompleteWords,
                     "separator": "",
@@ -152,12 +153,15 @@ class MathExpression_clh:
                     "height": 40
                 }}),
                 "result_to_label": ("BOOLEAN", {"default": False}),
+=======
+>>>>>>> 442ef1ab3cc7e02f962fa746773de7513abcf989:py/math_expression.py
             },
             "optional": {
                 # "a": (any, ),
                 # "b": (any,),
                 # "c": (any, ),
                 # "initial_value%d" % i: (any, {"rawLink": True,"lazy": True}) for i in range(1, MAX_FLOW_NUM)
+                "result_to_label": ("STRING", {"forceInput": False,"title": "结果放到标题"}),
             },
             "hidden": {
                 "extra_pnginfo": "EXTRA_PNGINFO",
@@ -303,7 +307,6 @@ class MathExpression_clh:
             "ui": {"value": [r]},
             "result": (int(r), float(r),[str(r)],),
         }
-
 
 NODE_CLASS_MAPPINGS = {
     "MathExpression_clh": MathExpression_clh,
