@@ -27,4 +27,4 @@ for module_name in node_list:
 WEB_DIRECTORY = f"web_version"
 __all__ = ['NODE_CLASS_MAPPINGS', 'NODE_DISPLAY_NAME_MAPPINGS', "WEB_DIRECTORY"]
 
-VERSION = "1.2.6"
+VERSION = "1.2.7"

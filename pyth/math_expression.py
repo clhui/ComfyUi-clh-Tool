@@ -304,7 +304,6 @@ class MathExpression_clh:
             "result": (int(r), float(r),[str(r)],),
         }
 
-
 NODE_CLASS_MAPPINGS = {
     "MathExpression_clh": MathExpression_clh,
 }

@@ -14,6 +14,7 @@ const CONVERTED_TYPE = "converted-widget";
 let translating = false;
 
 
+
 // Get position speech SpeechRecognition widget
 function getPostition(ctx, w_width, y, n_height, wInput) {
   const MARGIN = 10;
@@ -161,7 +162,7 @@ function SpeechWidget(node, inputName, inputData, widgetsText) {
 				  headers: {
 					  "Content-Type": "application/json"
 				  },
-				  body: { 
+				  body: {
 						"callback": "fQ32107555164891938351_1730044989712",
 						"q": false,
 						"appid": 20211206001020594,
