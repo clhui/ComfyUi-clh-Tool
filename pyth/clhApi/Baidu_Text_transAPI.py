@@ -16,7 +16,7 @@ from app.app_settings import AppSettings
 from app.user_manager import UserManager
 
 
-def baiduTranslateApi(request,query = "т╜нд"):
+def baiduTranslateApi(request,query = ""):
     # Set your own appid/appkey.
     settings = UserManager().settings.get_settings(request)
     def getSetting(request,setting_id):
