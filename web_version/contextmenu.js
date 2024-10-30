@@ -24,7 +24,7 @@ app.registerExtension({
         app.ui.settings.addSetting({
             id: "clhTool.translateBtn.switch",
             name: "🟢 Initiates translateBtn of text of Nodes 🔴",
-            defaultValue: false,
+            defaultValue: true,
             type: "boolean",
             options: (value) => [
                 { value: true, text: "On", selected: value === true },
@@ -34,19 +34,19 @@ app.registerExtension({
         app.ui.settings.addSetting({
             id: "clhTool.translate.appid",
             name: "🟢 百度 translate appid 🔴",
-            defaultValue: false,
+            defaultValue: "",
             type: "text",
         });
         app.ui.settings.addSetting({
             id: "clhTool.translate.key",
             name: "🟢 百度 translate key 🔴",
-            defaultValue: false,
+            defaultValue: "",
             type: "password",
         });
         app.ui.settings.addSetting({
             id: "clhTool.zhipu.key",
-            name: "🟢 zhipu key 🔴",
-            defaultValue: false,
+            name: "🟢 智普Ai key 🔴",
+            defaultValue: "",
             type: "password",
         });
     }

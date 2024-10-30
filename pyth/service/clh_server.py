@@ -1,10 +1,13 @@
 import os
 
+from envs.linly.Lib.venv import logger
+
 from app.app_settings import AppSettings
 from server import PromptServer
 
 
 from ..clhApi import Baidu_Text_transAPI
+from ..clhApi import ZhiPuAiApi
 # from ...server import PromptServer
 from aiohttp import web
 import json
@@ -74,12 +77,21 @@ async def clhpostapi(request):
 
 @PromptServer.instance.routes.post('/clh_translate')
 async def clhTranslateApi(request):
-    post = await request.post()
+    post = await request.json()
 
-
-    result = Baidu_Text_transAPI.baiduTranslateApi(post.query)
+    logger.info(post)
+    # result = Baidu_Text_transAPI.baiduTranslateApi(request,post.get("query"))
+    result = Baidu_Text_transAPI.translate(request,post.get("query"),post.get("from"),post.get("to"))
     return web.json_response(result)
 
+@PromptServer.instance.routes.post('/clh_zhipu')
+async def clhZhipuApi(request):
+    post = await request.json()
+
+    logger.info(post)
+    # result = Baidu_Text_transAPI.baiduTranslateApi(request,post.get("query"))
+    result = ZhiPuAiApi.chat(request,post.get("query"))
+    return web.json_response(result)
 
 
 print(f"\33[93m》===>====>========>Clh_Server:OK!<========<====<===《\33[0m")

@@ -14,7 +14,6 @@ const CONVERTED_TYPE = "converted-widget";
 let translating = false;
 
 
-
 // Get position speech SpeechRecognition widget
 function getPostition(ctx, w_width, y, n_height, wInput) {
   const MARGIN = 10;
@@ -31,7 +30,7 @@ function getPostition(ctx, w_width, y, n_height, wInput) {
     transform: scale,
     transform: transform,
     left: `${transform.a * w_width - 165 * scale.a + rect.left}px`,
-    top: `${(wInput.last_y - 13) * scale.d + scale.f + rect.top}px`,
+    top: `${(wInput.last_y - 15) * scale.d + scale.f + rect.top}px`,
     maxWidth: `${w_width - MARGIN * 2}px`,
     maxHeight: `${n_height - MARGIN * 2}px`,
     zIndex: wInput?.inputEl?.style?.zIndex
@@ -56,7 +55,7 @@ function getVoiceAndSettings() {
 }
 
 
-function SpeechWidget(node, inputName, inputData, widgetsText) {
+function translateBtnWidget(node, inputName, inputData, widgetsText) {
   const widget = {
     type: "clhTool_translation_type",
     name: inputName,
@@ -141,107 +140,132 @@ function SpeechWidget(node, inputName, inputData, widgetsText) {
         id: "clhTranslateBtn"+widgetsText.node_id,
         onclick: function () {
           try {
-            
             // Already playing
             if (translating) {
 				alert("已开始翻译！");
-				info.textContent = "canceled";
-				this.title = "Speak text";
-
-				buttonsStyles(speechesButtons, "remove");
-				setTimeout(() => (info.textContent = ""), 2000);
 				return;
             }
-
             // Start playing text
             const text = widgetsText?.element?.value;
             if (text.trim() !== "") {
 				translating = true
 				fetch("/clh_translate", {
 				  method: "POST",
-				  headers: {
-					  "Content-Type": "application/json"
-				  },
-				  body: {
-						"callback": "fQ32107555164891938351_1730044989712",
-						"q": false,
-						"appid": 20211206001020594,
-						"salt": 1730045672621,
-						"from": "auto",
-						"to": "zh",
-						"sign": "26fa470ed11727eb7e0de14dd14c1807" ,
-						query: text,
-					}
-				})
-				.then(response => {
+				  headers: { "Content-Type": "application/json" },
+				  body: JSON.stringify({query: text,from:"en",to:"zh" })
+				}).then(response => {
 				  translating = false;
 				  if (!response.ok) {
 					  throw new Error("Network response was not ok " + response.statusText);
 				  }
-				  widgetsText.element.value = response.json().trans_result.dst
 				  return response.json();
-				})
-				.then(data => {
-				  translating = false;
-				  // 请求成功，处理响应数据
-				  console.log(data);
-				})
-				.catch(error => {
+				}).then(data => {
+				    translating = false;
+				    // 请求成功，处理响应数据
+				    console.log(data);
+				    widgetsText.element.value = data.trans_result[0].dst
+				}).catch(error => {
 				  translating = false;
 				  // 处理错误
 				  console.error("There was a problem with your fetch operation:", error);
 				});
+            }
+          } catch (err) {
+            console.log(err);
+          }
+        },
+        textContent: "To CHN",
+        title: "翻译成中文,可前往comfyui设置中 clhTool.translateBtn开启或者关闭",
+        style: { "font-size": "7px", "width": "30px","padding": "1px", "height": "12px","line-height": "4px","margin": "2px"}
+      })
+    );
 
-				// const utterance = speakSynthesisUtterance(text, {
-				//   onend: (e) => {
-				//     this.title = "Speak text";
-				//     info.textContent = "";
-
-				//     buttonsStyles(speechesButtons, "remove");
-				//   },
-				// });
-
-				// if (utterance) {
-				//   this.title = "Cancel speech";
-				//   info.textContent = "saying now";
-
-				//   buttonsStyles(speechesButtons);
-				//   SpeechSynthesis.speak(utterance);
-				// }
-            } else {
-				const utterance = speakSynthesisUtterance(
-				`${widgetsText?.name || "This"}}, field is empty!`,
-				{
-				  onend: (e) => {
-					this.title = "Speak text";
-					info.textContent = "";
-
-					buttonsStyles(speechesButtons, "remove");
-				  },
-				}
-				);
-
-				if (utterance) {
-				this.title = "Cancel speech";
-				info.textContent = "empty text!";
-				buttonsStyles(speechesButtons);
-				SpeechSynthesis.speak(utterance);
-				}
+    buttons.push(
+      $el("button", {
+        id: "clhTranslateBtn"+widgetsText.node_id,
+        onclick: function () {
+          try {
+            // Already playing
+            if (translating) {
+				alert("已开始翻译！");
+				return;
+            }
+            // Start playing text
+            const text = widgetsText?.element?.value;
+            if (text.trim() !== "") {
+				translating = true
+				fetch("/clh_translate", {
+				  method: "POST",
+				  headers: { "Content-Type": "application/json" },
+				  body: JSON.stringify({query: text,from:"zh",to:"en" })
+				}).then(response => {
+				  translating = false;
+				  if (!response.ok) {
+					  throw new Error("Network response was not ok " + response.statusText);
+				  }
+				  return response.json();
+				}).then(data => {
+				    translating = false;
+				    // 请求成功，处理响应数据
+				    console.log(data);
+				    widgetsText.element.value = data.trans_result[0].dst
+				}).catch(error => {
+				  translating = false;
+				  // 处理错误
+				  console.error("There was a problem with your fetch operation:", error);
+				});
             }
           } catch (err) {
             console.log(err);
           }
         },
         textContent: "To Eng",
-        title: "翻译成英文",
-        style: {
-            "font-size": "6px",
-            "width": "26px",
-            "padding": "1px",
-            "height": "10px",
-            "line-height": "4px",
-            "margin": "2px"
-        }
+        title: "翻译成英文，您可以去菜单中clhTool菜单下打开或者关闭此功能",
+        style: { "font-size": "7px", "width": "30px","padding": "1px", "height": "12px","line-height": "4px","margin": "2px"}
+      })
+    );
+    buttons.push(
+      $el("button", {
+        id: "clhTranslateBtn"+widgetsText.node_id,
+        onclick: function () {
+          try {
+            // Already playing
+            if (translating) {
+				alert("已开始翻译！");
+				return;
+            }
+            // Start playing text
+            const text = widgetsText?.element?.value;
+            if (text.trim() !== "") {
+				translating = true
+				fetch("/clh_zhipu", {
+				  method: "POST",
+				  headers: { "Content-Type": "application/json" },
+				  body: JSON.stringify({query: text,from:"zh",to:"en" })
+				}).then(response => {
+				  translating = false;
+				  if (!response.ok) {
+					  throw new Error("Network response was not ok " + response.statusText);
+				  }
+				  return response.json();
+				}).then(data => {
+				    translating = false;
+				    // 请求成功，处理响应数据
+				    console.log(data);
+				    widgetsText.element.value = data.choices[0].message.content
+				}).catch(error => {
+				  translating = false;
+				  // 处理错误
+				  console.error("There was a problem with your fetch operation:", error);
+				});
+            }
+          } catch (err) {
+            console.log(err);
+          }
+        },
+        textContent: "智普Ai",
+        title: "智普，您可以去菜单中clhTool菜单下打开或者关闭此功能",
+        style: { "font-size": "7px", "width": "30px","padding": "1px", "height": "12px","line-height": "4px","margin": "2px"}
       })
     );
   }
@@ -310,10 +334,31 @@ function SpeechWidget(node, inputName, inputData, widgetsText) {
   return widget;
 }
 /* ~~~ end - Speech & Recognition speech Widget ~~~ */
-
+function doTranslate(text,from,to){
+    fetch("/clh_translate", {
+        method: "POST",
+        headers: {"Content-Type": "application/json" },
+        body: JSON.stringify({query: text,from:"zh",to:"en"})
+    }).then(response => {
+        translating = false;
+        if (!response.ok) {
+          throw new Error("Network response was not ok " + response.statusText);
+        }
+        return response.json();
+    }).then(data => {
+        translating = false;
+        // 请求成功，处理响应数据
+        console.log(data);
+        widgetsText.element.value = data.trans_result[0].dst
+    }).catch(error => {
+        translating = false;
+        // 处理错误
+        console.error("There was a problem with your fetch operation:", error);
+    });
+}
 
 export {
-  SpeechWidget,
+  translateBtnWidget,
   getPostition
 //  makeColorWidget,
 //  createPreiviewSize,
