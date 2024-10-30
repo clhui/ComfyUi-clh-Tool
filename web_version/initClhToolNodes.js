@@ -34,16 +34,6 @@ app.registerExtension({
 					}
 					
 				}
-
-				const MathExpressionCreated = nodeType.prototype.onNodeCreated || function() {};
-				nodeType.prototype.onNodeCreated = function () {
-                    MathExpressionCreated.apply(this, arguments);
-
-					// 尝试减节点
-					refreshMathExpressionInput(this,targetSlot)
-
-                }
-
 			    const onGetMaskSizeConnectInput = nodeType.prototype.onConnectInput;
                 nodeType.prototype.onConnectInput = function (targetSlot, type, output, originNode, originSlot) {
                     const v = onGetMaskSizeConnectInput? onGetMaskSizeConnectInput.apply(this, arguments): undefined
@@ -86,7 +76,7 @@ app.registerExtension({
 					let values = message["value"].toString().split('x');
 					const result_to_label = this.widgets.find(w => w.name === "result_to_label")["value"];
 					if(result_to_label){
-						this.title = "result：" + values;
+						this.title = result_to_label+ values;
 					}
 					return r
 				}

@@ -24,7 +24,7 @@ app.registerExtension({
         app.ui.settings.addSetting({
             id: "clhTool.translateBtn.switch",
             name: "🟢 Initiates translateBtn of text of Nodes 🔴",
-            defaultValue: false,
+            defaultValue: true,
             type: "boolean",
             options: (value) => [
                 { value: true, text: "On", selected: value === true },
