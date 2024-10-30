@@ -130,6 +130,20 @@ MAX_FLOW_NUM = 5
 
 lazy_options = {"lazy": True}
 
+class INTConstant:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {"required": {
+            "value": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
+        },
+        }
+    RETURN_TYPES = ("INT",)
+    RETURN_NAMES = ("value",)
+    FUNCTION = "get_value"
+    CATEGORY = "simpleTool_clh/constants"
+
+    def get_value(self, value):
+        return (value,)
 
 class MathExpression_clh:
     def __init__(self):
@@ -306,6 +320,7 @@ class MathExpression_clh:
 
 NODE_CLASS_MAPPINGS = {
     "MathExpression_clh": MathExpression_clh,
+    "INTConstant_clh": INTConstant
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
