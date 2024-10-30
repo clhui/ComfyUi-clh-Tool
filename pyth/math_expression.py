@@ -153,6 +153,7 @@ class MathExpression_clh:
     def INPUT_TYPES(cls):
         inputs = {
             "required": {
+                "result_to_label": ("STRING", {"forceInput": False,"title": "结果放到标题"}),
                 "expression": ("STRING", {"multiline": True, "dynamicPrompts": False, "pysssss.autocomplete": {
                     "words": autocompleteWords,
                     "separator": "",
