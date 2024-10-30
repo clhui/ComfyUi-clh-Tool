@@ -163,7 +163,8 @@ function translateBtnWidget(node, inputName, inputData, widgetsText) {
 				    translating = false;
 				    // 请求成功，处理响应数据
 				    console.log(data);
-				    widgetsText.element.value = data.trans_result[0].dst
+				    const resultString = data.trans_result.map(person => person.dst).join('\n');
+				    widgetsText.element.value = resultString
 				}).catch(error => {
 				  translating = false;
 				  // 处理错误

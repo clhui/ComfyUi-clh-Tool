@@ -69,7 +69,7 @@ def translate(request,text, from_lang='en', to_lang='zh'):
     m = hashlib.md5()
     m.update(sign.encode())
     sign = m.hexdigest()
-    text_without_newlines = text.replace("\n", "")
+    text_without_newlines = text.replace("\\n", "")
 
     payload = {
         'q': text_without_newlines,
