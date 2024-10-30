@@ -2,11 +2,11 @@ import requests
 import json
 
 from app.user_manager import UserManager
-# ÷«∆’AIµƒAPIїщ±Њ–≈ѕҐ
-API_BASE_URL = "https://open.bigmodel.cn/"  # Љў…иµƒAPIїщі°URL
-ENDPOINT = "api/paas/v4/chat/completions"  # Љў…иµƒќƒ±Њ ґ±рљ”њЏґЋµг
+# пњљпњљпњљпњљAIпњљпњљAPIпњљпњљпњљпњљпњљпњљѕҐ
+API_BASE_URL = "https://open.bigmodel.cn/"  # пњљпњљпњљпњљпњљAPIпњљпњљпњљпњљURL
+ENDPOINT = "api/paas/v4/chat/completions"  # пњљпњљпњљпњљпњљпњљƒ±пњљ ґпњљпњљ”њЏґЋµпњљ
 
-def chat(request,query = "‘≠ќƒ"):
+def chat(request,query = ""):
     # Set your own appid/appkey.
     settings = UserManager().settings.get_settings(request)
     def getSetting(request,setting_id):
@@ -15,29 +15,29 @@ def chat(request,query = "‘≠ќƒ"):
     APP_SECRET = getSetting(request,"clhTool.zhipu.key")
     APP_ID = "zhipuApp"
 
-    # „Љ±Є»ѕ÷§–≈ѕҐ£®ЄщЊЁ÷«∆’AIµƒ»ѕ÷§їъ÷∆њ…ƒ№”–Ћщ≤їЌђ£©
+    # „Љпњљпњљпњљпњљ÷§пњљпњљѕҐпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљAIпњљпњљпњљпњљ÷§пњљпњљпњљ∆њпњљпњљпњљпњљпњљпњљпњљпњљпњљЌђпњљпњљ
     auth_headers = {
         "Authorization": f"Bearer {APP_SECRET}",
         "Content-Type": "application/json"
     }
 
-    # „Љ±Є«л«уће£®ЄщЊЁ µЉ µƒAPIќƒµµєє‘м£©
+    # „Љпњљпњљпњљпњљпњљпњљпњље£®пњљпњљпњљпњљ µпњљ µпњљAPIпњљƒµпњљпњљпњљпњљм£©
     # request_data = {
         # "app_id": APP_ID,
-        # "image_url": "http://example.com/your-image.jpg",  # Љў…иµƒЌЉ∆ђURL
-        # їт’я є”√∆дЋы„÷ґќ…ѕіЂЌЉѕс эЊЁ£ђ±»»зbase64±а¬лµƒЌЉѕс„÷ЈыіЃ
+        # "image_url": "http://example.com/your-image.jpg",  # пњљпњљпњљпњљпњљЌЉ∆ђURL
+        # пњљпњљпњљпњљ єпњљпњљпњљпњљпњљпњљпњљ÷ґпњљпњљѕіпњљЌЉпњљпњљпњљпњљпњљЁ£пњљпњљпњљпњљпњљbase64пњљпњљпњљпњљпњљЌЉпњљпњљпњљ÷Јпњљпњљпњљ
     # }
     request_data = {
         "model": "glm-4",
         "messages": [
             {
                 "role": "system",
-                "content": "аЋ£ђAI÷ъ ÷£°ƒг «“їЄц”≈–гµƒї≠Љ“"
+                "content": "пњљЋ£пњљAIпњљпњљпњљ÷£пњљпњљпњљпњљпњљ“їпњљпњљпњљпњљпњљпњљƒїпњљпњљпњљ"
             },
             {
                 "role": "user",
-                "content": "ќ“ѕл√и ц“їЄцї≠√ж£ђµЂќ“µƒі їг±»љѕ…ў£ђѕ£Ќыƒгƒ№∞пќ“∞—Ћь±дµ√Єь…ъґѓ°ҐЄьѕкѕЄ°£∞пќ“Љ”“ї–©–ќ»Ёі °Ґґѓі їт’я∆дЋыµƒѕЄљЏ£ђ»√’вЄцї≠√жЄьЉ”итит»з…ъ£ђ"
-                           "ѕ¬√ж «ќ“ґ‘ї≠√жµƒ√и ц£ђЈµїЎЄс љ «÷ї”–ї≠√ж√и ц"
+                "content": "пњљпњљпњљпњљпњљпњљпњљпњљ“їпњљпњљпњљпњљпњљж£ђпњљпњљпњљ“µƒі їпњљ»љпњљпњљў£пњљѕ£пњљпњљпњљпњљпњљ№∞пњљпњљ“∞пњљпњљпњљпњљпњљ√ЄпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљѕЄпњљпњљпњљпњљпњљ“Љпњљ“ї–©пњљпњљпњљЁі °пњљпњљпњљпњљ їпњљпњљпњљпњљпњљпњљпњљпњљпњљѕЄпњљЏ£пњљпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљ"
+                           "пњљпњљпњљпњљпњљпњљпњљ“ґ‘їпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљЎЄпњљ љпњљпњљ÷їпњљ–їпњљпњљпњљпњљпњљпњљпњљ"
             },
             {
                 "role": "user",
@@ -46,17 +46,17 @@ def chat(request,query = "‘≠ќƒ"):
         ]
     }
 
-    # ЈҐЋЌ«л«уµљ÷«∆’AIµƒAPIґЋµг
+    # пњљпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљпњљAIпњљпњљAPIпњљЋµпњљ
     response = requests.post(f"{API_BASE_URL}{ENDPOINT}", headers=auth_headers, data=json.dumps(request_data))
 
-    # Љм≤йѕм”¶„іћђ
+    # пњљпњљпњљпњљпњљ”¶„іћђ
     if response.status_code == 200:
-        # љвќцѕм”¶ эЊЁ
+        # пњљпњљпњљпњљпњљпњљ”¶пњљпњљпњљпњљ
         response_data = response.json()
-        print(" ґ±рљбєы:", response_data)
-        print(" ґ±рљбєы:", response_data.get("result", {}).get("text", "ќі ґ±рµљќƒ±Њ"))
+        print(" ґпњљпњљпњљпњљ:", response_data)
+        print(" ґпњљпњљпњљпњљ:", response_data.get("result", {}).get("text", "ќі ґпњљпњљпњљƒ±пњљ"))
         return response_data
     else:
-        # і¶јнінќу
-        print(f"«л«у І∞№£ђ„іћђ¬л: {response.status_code}")
-        print(f"інќу–≈ѕҐ: {response.text}")
+        # пњљпњљпњљпњљпњљпњљпњљ
+        print(f"пњљпњљпњљпњљ Іпњљ№£пњљ„іћђпњљпњљ: {response.status_code}")
+        print(f"пњљпњљпњљпњљпњљпњљѕҐ: {response.text}")
