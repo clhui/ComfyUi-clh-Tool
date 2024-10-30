@@ -159,19 +159,13 @@ class MathExpression_clh:
                     "default": "aram0+param1+param2",
                     "height": 40
                 }}),
-                # "result_to_label": ("STRING", {"multiline": True, "dynamicPrompts": False, "pysssss.autocomplete": {
-                #     "words": autocompleteWords,
-                #     "separator": "",
-                #     "default": "aram0+param1+param2",
-                #     "height": 40
-                # }}),
-                "result_to_label": ("BOOLEAN", {"default": False}),
             },
             "optional": {
                 # "a": (any, ),
                 # "b": (any,),
                 # "c": (any, ),
                 # "initial_value%d" % i: (any, {"rawLink": True,"lazy": True}) for i in range(1, MAX_FLOW_NUM)
+                "result_to_label": ("STRING", {"forceInput": False,"title": "结果放到标题"}),
             },
             "hidden": {
                 "extra_pnginfo": "EXTRA_PNGINFO",
@@ -234,7 +228,7 @@ class MathExpression_clh:
             return target.shape[1]
 
     # def evaluate(self, expression, prompt, extra_pnginfo={}, a=None, b=None, c=None):
-    def evaluate(self, expression,expression2, prompt, extra_pnginfo={}, **initial_values):
+    def evaluate(self, expression, prompt, extra_pnginfo={}, **initial_values):
         expression = expression.replace('\n', ' ').replace('\r', '')
         node = ast.parse(expression, mode='eval').body
 
