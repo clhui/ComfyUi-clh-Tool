@@ -126,10 +126,24 @@ def validate_list_args(args: Dict[str, List[Any]]) -> Tuple[bool, Optional[str],
     return True, None, None
 
 
-MAX_FLOW_NUM = 5
+MAX_FLOW_NUM = 2
 
 lazy_options = {"lazy": True}
 
+class INTConstant:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {"required": {
+            "value": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}),
+        },
+        }
+    RETURN_TYPES = ("INT",)
+    RETURN_NAMES = ("value",)
+    FUNCTION = "get_value"
+    CATEGORY = "simpleTool_clh/constants"
+
+    def get_value(self, value):
+        return (value,)
 
 class MathExpression_clh:
     def __init__(self):
@@ -145,19 +159,14 @@ class MathExpression_clh:
                     "default": "aram0+param1+param2",
                     "height": 40
                 }}),
-                "expression2": ("STRING", {"multiline": True, "dynamicPrompts": False, "pysssss.autocomplete": {
-                    "words": autocompleteWords,
-                    "separator": "",
-                    "default": "aram0+param1+param2",
-                    "height": 40
-                }}),
-                "result_to_label": ("BOOLEAN", {"default": False}),
             },
             "optional": {
-                # "a": (any, ),
-                # "b": (any,),
-                # "c": (any, ),
-                # "initial_value%d" % i: (any, {"rawLink": True,"lazy": True}) for i in range(1, MAX_FLOW_NUM)
+                "result_to_label": ("STRING", {"forceInput": False,"multiline": True, "dynamicPrompts": False, "pysssss.autocomplete": {
+                    "words": autocompleteWords,
+                    "separator": "",
+                    "default": "",
+                    "height": 40
+                }}),
             },
             "hidden": {
                 "extra_pnginfo": "EXTRA_PNGINFO",
@@ -220,7 +229,7 @@ class MathExpression_clh:
             return target.shape[1]
 
     # def evaluate(self, expression, prompt, extra_pnginfo={}, a=None, b=None, c=None):
-    def evaluate(self, expression,expression2, prompt, extra_pnginfo={}, **initial_values):
+    def evaluate(self, expression, prompt, extra_pnginfo={}, **initial_values):
         expression = expression.replace('\n', ' ').replace('\r', '')
         node = ast.parse(expression, mode='eval').body
 
@@ -306,6 +315,7 @@ class MathExpression_clh:
 
 NODE_CLASS_MAPPINGS = {
     "MathExpression_clh": MathExpression_clh,
+    "INTConstant_clh": INTConstant
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
