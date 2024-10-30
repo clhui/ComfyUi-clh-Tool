@@ -82,6 +82,7 @@ async def clhTranslateApi(request):
     logger.info(post)
     # result = Baidu_Text_transAPI.baiduTranslateApi(request,post.get("query"))
     result = Baidu_Text_transAPI.translate(request,post.get("query"),post.get("from"),post.get("to"))
+    logger.info(result)
     return web.json_response(result)
 
 @PromptServer.instance.routes.post('/clh_zhipu')
@@ -91,6 +92,8 @@ async def clhZhipuApi(request):
     logger.info(post)
     # result = Baidu_Text_transAPI.baiduTranslateApi(request,post.get("query"))
     result = ZhiPuAiApi.chat(request,post.get("query"))
+
+    logger.info(result)
     return web.json_response(result)
 
 
