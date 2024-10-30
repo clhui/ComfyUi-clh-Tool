@@ -126,7 +126,7 @@ def validate_list_args(args: Dict[str, List[Any]]) -> Tuple[bool, Optional[str],
     return True, None, None
 
 
-MAX_FLOW_NUM = 50
+MAX_FLOW_NUM = 2
 
 lazy_options = {"lazy": True}
 
