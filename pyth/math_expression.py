@@ -159,12 +159,12 @@ class MathExpression_clh:
                     "default": "aram0+param1+param2",
                     "height": 40
                 }}),
-                "expression2": ("STRING", {"multiline": True, "dynamicPrompts": False, "pysssss.autocomplete": {
-                    "words": autocompleteWords,
-                    "separator": "",
-                    "default": "aram0+param1+param2",
-                    "height": 40
-                }}),
+                # "result_to_label": ("STRING", {"multiline": True, "dynamicPrompts": False, "pysssss.autocomplete": {
+                #     "words": autocompleteWords,
+                #     "separator": "",
+                #     "default": "aram0+param1+param2",
+                #     "height": 40
+                # }}),
                 "result_to_label": ("BOOLEAN", {"default": False}),
             },
             "optional": {
