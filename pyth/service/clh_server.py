@@ -1,6 +1,5 @@
 import os
 
-from envs.linly.Lib.venv import logger
 
 from app.app_settings import AppSettings
 from server import PromptServer
