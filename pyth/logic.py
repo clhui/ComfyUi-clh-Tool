@@ -141,7 +141,7 @@ class SomethingToString_clh:
     def INPUT_TYPES(s):
         return {
             "required": {
-                "input": (any, {}),
+                "input": (any_type, {}),
             },
             "optional": {
                 "prefix": ("STRING", {"default": ""}),
