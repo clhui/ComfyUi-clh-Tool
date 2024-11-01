@@ -110,7 +110,7 @@ class JoinStringMulti_clh:
     RETURN_TYPES = ("STRING",)
     RETURN_NAMES = ("string",)
     FUNCTION = "combine"
-    CATEGORY = "simpleTool_clh"
+    CATEGORY = "simpleTool_clh/text"
     DESCRIPTION = """
                 Creates single string, or a list of strings, from  
                 multiple input strings.  
@@ -136,9 +136,43 @@ class JoinStringMulti_clh:
         else:
             return (string,)  # Return the combined string
 
+class SomethingToString_clh:
+    @classmethod
+
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "input": (any, {}),
+            },
+            "optional": {
+                "prefix": ("STRING", {"default": ""}),
+                "suffix": ("STRING", {"default": ""}),
+            }
+        }
+    RETURN_TYPES = ("STRING",)
+    FUNCTION = "stringify"
+    CATEGORY = "simpleTool_clh/text"
+    DESCRIPTION = """
+Converts any type to a string.
+"""
+
+    def stringify(self, input, prefix="", suffix=""):
+        if isinstance(input, (int, float, bool)):
+            stringified = str(input)
+        elif isinstance(input, list):
+            stringified = ', '.join(str(item) for item in input)
+        else:
+            return
+        if prefix: # Check if prefix is not empty
+            stringified = prefix + stringified # Add the prefix
+        if suffix: # Check if suffix is not empty
+            stringified = stringified + suffix # Add the suffix
+
+        return (stringified,)
+
 
 NODE_CLASS_MAPPINGS = {
-    "JoinStringMulti_clh": JoinStringMulti_clh
+    "SomethingToString_clh": SomethingToString_clh
 
 }
 
