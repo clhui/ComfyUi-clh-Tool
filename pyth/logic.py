@@ -151,7 +151,7 @@ class SomethingToString_clh:
     RETURN_TYPES = ("STRING",)
     FUNCTION = "stringify"
     CATEGORY = "simpleTool_clh"
-    DESCRIPTION = "Converts any_type type to a string."
+    DESCRIPTION = "Converts any type to a string."
 
     def stringify(self, input, prefix="", suffix=""):
         if isinstance(input, (int, float, bool)):
@@ -160,17 +160,21 @@ class SomethingToString_clh:
             stringified = ', '.join(str(item) for item in input)
         else:
             return
-        if prefix: # Check if prefix is not empty
-            stringified = prefix + stringified # Add the prefix
-        if suffix: # Check if suffix is not empty
-            stringified = stringified + suffix # Add the suffix
+        # Check if prefix is not empty
+        if prefix:
+            # Add the prefix
+            stringified = prefix + stringified
+        # Check if suffix is not empty
+        if suffix:
+            # Add the suffix
+            stringified = stringified + suffix
 
         return (stringified,)
 
 
 NODE_CLASS_MAPPINGS = {
     "JoinStringMulti_clh": JoinStringMulti_clh,
-    "SomethingToString_clh": SomethingToString_clh,
+    "SomethingToString_clh": SomethingToString_clh
 
 }
 
