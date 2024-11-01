@@ -138,7 +138,6 @@ class JoinStringMulti_clh:
 
 class SomethingToString_clh:
     @classmethod
-
     def INPUT_TYPES(s):
         return {
             "required": {
