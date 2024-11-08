@@ -79,21 +79,21 @@ async def clhpostapi(request):
 async def clhTranslateApi(request):
     post = await request.json()
 
-    logger.info(post)
+    logger.logs(post)
     # result = Baidu_Text_transAPI.baiduTranslateApi(request,post.get("query"))
     result = Baidu_Text_transAPI.translate(request,post.get("query"),post.get("from"),post.get("to"))
-    logger.info(result)
+    logger.logs(result)
     return web.json_response(result)
 
 @PromptServer.instance.routes.post('/clh_zhipu')
 async def clhZhipuApi(request):
     post = await request.json()
 
-    logger.info(post)
+    logger.logs(post)
     # result = Baidu_Text_transAPI.baiduTranslateApi(request,post.get("query"))
     result = ZhiPuAiApi.chat(request,post.get("query"))
 
-    logger.info(result)
+    logger.logs(result)
     return web.json_response(result)
 
 
