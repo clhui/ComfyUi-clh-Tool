@@ -56,8 +56,9 @@ function getVoiceAndSettings() {
 
 
 function translateBtnWidget(node, inputName, inputData, widgetsText) {
+  const widgetType = "clhTool_translation_type"
   const widget = {
-    type: "clhTool_translation_type",
+    type: widgetType,
     name: inputName,
     value: inputData,
     size: [42, 1],
@@ -323,7 +324,7 @@ function translateBtnWidget(node, inputName, inputData, widgetsText) {
   const onRemovedOrig = node.onRemoved;
   node.onRemoved = function () {
     node?.widgets?.forEach((w) => {
-      if (w.type === "speak_and_recognation_type") {
+      if (w.type === widgetType) {
         w?.onRemove();
       }
     });
