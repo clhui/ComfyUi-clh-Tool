@@ -4,6 +4,7 @@ import os
 from app.app_settings import AppSettings
 from server import PromptServer
 
+from app import logger
 
 from ..clhApi import Baidu_Text_transAPI
 from ..clhApi import ZhiPuAiApi
