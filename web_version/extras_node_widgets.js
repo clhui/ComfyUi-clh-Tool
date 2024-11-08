@@ -177,7 +177,7 @@ function translateBtnWidget(node, inputName, inputData, widgetsText) {
         },
         textContent: "To CHN",
         title: "翻译成中文,可前往comfyui设置中 clhTool.translateBtn开启或者关闭",
-        style: { "font-size": "7px", "width": "30px","padding": "1px", "height": "12px","line-height": "4px","margin": "2px"}
+        style: { "font-size": "7px", "width": "32px","padding": "1px", "height": "12px","line-height": "4px","margin": "2px"}
       })
     );
 
