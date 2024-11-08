@@ -1,10 +1,11 @@
 import os
+import logging
+
 
 
 from app.app_settings import AppSettings
 from server import PromptServer
 
-from app import logger
 
 from ..clhApi import Baidu_Text_transAPI
 from ..clhApi import ZhiPuAiApi
@@ -13,6 +14,11 @@ from aiohttp import web
 import json
 
 
+# 设置日志级别为DEBUG
+logging.basicConfig(level=logging.INFO)
+
+# 创建一个名为'my_logger'的日志器
+logger = logging.getLogger('clh_logger')
 class Cancelled(Exception):
     pass
 def read_file_content(file_path):
@@ -79,21 +85,21 @@ async def clhpostapi(request):
 async def clhTranslateApi(request):
     post = await request.json()
 
-    logger.logs(post)
+    logger.info(post)
     # result = Baidu_Text_transAPI.baiduTranslateApi(request,post.get("query"))
     result = Baidu_Text_transAPI.translate(request,post.get("query"),post.get("from"),post.get("to"))
-    logger.logs(result)
+    logger.info(result)
     return web.json_response(result)
 
 @PromptServer.instance.routes.post('/clh_zhipu')
 async def clhZhipuApi(request):
     post = await request.json()
 
-    logger.logs(post)
+    logger.info(post)
     # result = Baidu_Text_transAPI.baiduTranslateApi(request,post.get("query"))
     result = ZhiPuAiApi.chat(request,post.get("query"))
 
-    logger.logs(result)
+    logger.info(result)
     return web.json_response(result)
 
 
