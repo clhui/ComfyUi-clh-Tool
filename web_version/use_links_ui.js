@@ -95,9 +95,9 @@ export class RenderAllUeLinks {
     }
 
    static animate_step(ctx) {
-        const max_blur = 8;
+        const max_blur = 18;
         const speed = 0.5;
-        var f = (LiteGraph.getTime() * 0.001 * speed) % 10;
+        var f = (LiteGraph.getTime() * 0.001 * speed) % 1;
         const step = Math.ceil(f * 2 * max_blur) % (2 * max_blur);
         ctx.shadowBlur = (step < max_blur) ? step + 4 : 3 + 2 * max_blur - step;
    }
@@ -107,7 +107,7 @@ export class RenderAllUeLinks {
 //            if (color=="") color = app.canvas.default_link_color;
           ctx.fillStyle = color;
           //点个数
-          var max_count = 2;
+          var max_count = 1;
           //循环周期 ，单位：秒
           var cycle_period = 5
           for (var i2 = 0; i2 < max_count; ++i2) {
