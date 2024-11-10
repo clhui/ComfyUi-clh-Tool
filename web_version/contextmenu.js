@@ -49,5 +49,16 @@ app.registerExtension({
             defaultValue: "",
             type: "password",
         });
+        app.ui.settings.addSetting({
+            id: "clhTool.links.animate",
+            name: "🟢 线条是否流动运动 🔴",
+            defaultValue: true,
+            type: "boolean",
+            options: (value) => [
+                { value: true, text: "On", selected: value === true },
+                { value: false, text: "Off", selected: value === false },
+            ],
+            onChange: app.graph.change.bind(app.graph),
+        });
     }
 });

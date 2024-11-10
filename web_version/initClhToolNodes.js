@@ -1,5 +1,6 @@
 import { api } from "../../../scripts/api.js";
 import { app } from "../../../scripts/app.js";
+import { RenderAllUeLinks } from "./use_links_ui.js";
 
 app.registerExtension({
     name:"clhTool-extension",
@@ -168,6 +169,17 @@ app.registerExtension({
 
 	},
     async setup(){
+        /*
+        When we draw connections, do the ue ones as well (logic for on/off is in lrc)
+        */
+        const drawConnections = LGraphCanvas.prototype.drawConnections;
+        LGraphCanvas.prototype.drawConnections = function(ctx) {
+            drawConnections?.apply(this, arguments);
+            RenderAllUeLinks.render_all_ue_links(this,ctx);
+        }
+        api.addEventListener("status", ({detail}) => {
+            RenderAllUeLinks.note_queue_size(detail ? detail.exec_info.queue_remaining : 0)
+        });
         console.log("注册clhTool扩展！")
     }
 })

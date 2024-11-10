@@ -78,39 +78,7 @@ app.registerExtension({
 
               if (!isIncludesSpeech && widgetsTextMulti.length) {
                 widgetsTextMulti.forEach(async (textWidget) => {
-//                  //添加小组件（组件类型，组件名，组件）
-//                  let widget_1 = this.addWidget("toggle", "to english", null, (value) => {
-//					    const font_path_widgets = this.widgets.find(w => w.name === "font_path");
-//                        font_path_widgets.value = value
-//				  });
-//				  widget_1.size = [42, 1]
-//				  widget_1.draw = (ctx, node, widget_width, y, widget_height) =>{
-//                      const hidden = textWidget?.element?.hidden;
-//
-//                      widget.element.dataset.shouldHide = hidden ? "true" : "false";
-//                      const isInVisibleNodes =
-//                        widget.element.dataset.isInVisibleNodes === "true";
-//                      const isCollapsed = widget.element.dataset.collapsed === "true";
-//                      const actualHidden = hidden || !isInVisibleNodes || isCollapsed;
-//                      const wasHidden = widget.element.hidden;
-//                      widget.element.hidden = actualHidden;
-//                      widget.element.style.display = actualHidden ? "none" : "flex";
-//                      if (actualHidden && !wasHidden) {
-//                        widget.options.onHide?.(widget);
-//                      }
-//
-//                      if (hidden) {
-//                        return;
-//                      }
-//
-//                      Object.assign(
-//                        widget.element.style,
-//                        getPostition(ctx, widget_width, y, node.size[1], textWidget)
-//                      );
-//                  }
-//				  widget_1.computeSize = (...args) => {
-//                      return [22, 1];
-//                  }
+
 				  //添加全自定义节点 constructor
                   this.addCustomWidget(translateBtnWidget(this, "clhTool_translation_button", true, textWidget)                  );
                 });
