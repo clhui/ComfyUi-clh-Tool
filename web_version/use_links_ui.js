@@ -51,7 +51,7 @@ export class RenderAllUeLinks {
               - If there are links, and our mode is mouseover, wait 200ms
               - Otherwise don't request an update (there are no links that could be shown without something else requesting a redraw)
             */
-            const timeout = (any_links_shown) ? ((animate % 2 == 1) ? 30 : 100) : ((mode==2 || mode==3) && any_links) ? 200 : -1;
+            const timeout = (any_links_shown) ? ((animate % 2 == 1) ? 100 : 100) : ((mode==2 || mode==3) && any_links) ? 200 : -1;
             if (timeout>0) setTimeout( app.graph.change.bind(app.graph), timeout );
         }
 
