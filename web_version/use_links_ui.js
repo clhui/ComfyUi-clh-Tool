@@ -106,8 +106,13 @@ export class RenderAllUeLinks {
 //            var color = LGraphCanvas.link_type_colors[ue_connection.type];
 //            if (color=="") color = app.canvas.default_link_color;
           ctx.fillStyle = color;
-          for (var i2 = 0; i2 < 1; ++i2) {
-            var f = (LiteGraph.getTime() * 1e-3 + i2 * 0.2) % 1;
+          //点个数
+          var max_count = 2;
+          //循环周期 ，单位：秒
+          var cycle_period = 5
+          for (var i2 = 0; i2 < max_count; ++i2) {
+            //计算第i个点的位置百分百 根据当前时间计算第一个点位置，再加上后面点的偏移，就可知道当前点的位置
+            var f = (LiteGraph.getTime() * 1e-3 /cycle_period + i2 * 1.0 /max_count) % 1;
             var pos2 = app.canvas.computeConnectionPoint(
               a,
               b,
