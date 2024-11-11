@@ -51,7 +51,7 @@ app.registerExtension({
         });
         app.ui.settings.addSetting({
             id: "clhTool.links.animate",
-            name: "🟢 线条是否流动运动 🔴",
+            name: "🟢 线条流动运动开关 🔴",
             defaultValue: true,
             type: "boolean",
             options: (value) => [
@@ -59,6 +59,12 @@ app.registerExtension({
                 { value: false, text: "Off", selected: value === false },
             ],
             onChange: app.graph.change.bind(app.graph),
+        });
+        app.ui.settings.addSetting({
+            id: "clhTool.links.animateTime",
+            name: "🟢 线条流动运动间隔ms 🔴",
+            defaultValue: 500,
+            type: "number",
         });
     }
 });

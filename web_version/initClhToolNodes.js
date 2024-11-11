@@ -175,7 +175,7 @@ app.registerExtension({
         const drawConnections = LGraphCanvas.prototype.drawConnections;
         LGraphCanvas.prototype.drawConnections = function(ctx) {
             drawConnections?.apply(this, arguments);
-            RenderAllUeLinks.render_all_ue_links(this,ctx);
+            RenderAllUeLinks.render_all_ue_links(ctx);
         }
         api.addEventListener("status", ({detail}) => {
             RenderAllUeLinks.note_queue_size(detail ? detail.exec_info.queue_remaining : 0)

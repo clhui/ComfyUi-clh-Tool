@@ -8,15 +8,15 @@ export class RenderAllUeLinks {
 
     static queue_size = null;
     static note_queue_size(x) { this.queue_size = x; }
-    static render_all_ue_links(lGraphCanvas,ctx) {
+    static render_all_ue_links(ctx) {
         try {
-            this._render_all_ue_links(lGraphCanvas,ctx);
+            this._render_all_ue_links(ctx);
         } catch (e) {
             console.error(e);
         }
     }
 
-    static _render_all_ue_links(lGraphCanvas,ctx) {
+    static _render_all_ue_links(ctx) {
 
         ctx.save();
         const orig_hqr = app.canvas.highquality_render;
@@ -26,7 +26,7 @@ export class RenderAllUeLinks {
         if (app.ui.settings.getSettingValue('AE.stop.animation.running', true) && this.queue_size>0) animate = 0;
         if (animate==2 || animate==3) this.animate_step(ctx);
         //动态模糊
-        this.animate_step(ctx);
+//        this.animate_step(ctx);
         var any_links_shown = false;
         var any_links = false;
 
@@ -51,15 +51,34 @@ export class RenderAllUeLinks {
               - If there are links, and our mode is mouseover, wait 200ms
               - Otherwise don't request an update (there are no links that could be shown without something else requesting a redraw)
             */
-            const timeout = (any_links_shown) ? ((animate % 2 == 1) ? 100 : 100) : ((mode==2 || mode==3) && any_links) ? 200 : -1;
-            if (timeout>0) setTimeout( app.graph.change.bind(app.graph), timeout );
+//            const timeout = (any_links_shown) ? ((animate % 2 == 1) ? 100 : 100) : ((mode==2 || mode==3) && any_links) ? 200 : -1;
+//            const timeout = 300;
+//            if (timeout>0) setTimeout( app.graph.change.bind(app.graph), timeout );
+            //防止多次注册
+            if(!this.registered){
+                this.registered = true;
+                this.setLinkTimeout(ctx);
+            }
         }
 
         app.canvas.highquality_render = orig_hqr;
         ctx.restore();
         this.reading_list = false;
     }
+    static registered = false;
+    //定时刷新
+    static setLinkTimeout(ctx){
+            const timeout = app.ui.settings.getSettingValue('clhTool.links.animateTime', 1000);
+            if (timeout>0) setTimeout( ()=>{
+                var animate = app.ui.settings.getSettingValue('clhTool.links.animateType', 1);
+                if(animate){
+//                    this.render_all_ue_links(app.canvas.ctx)
+                    app.graph.change.bind(app.graph)();
+                    this.setLinkTimeout(ctx);
+                }
+            }, timeout );
 
+    }
 
     // memory reuse
     static slot_pos1 = new Float32Array(2); //to reuse
