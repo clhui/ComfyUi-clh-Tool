@@ -6,7 +6,7 @@
 """
 import importlib
 import sys, os
-from .pyth.service.server import Cancelled
+# from .pyth.service.server import Cancelled
 from .pyth.service.clh_server import Cancelled
 
 sys.path.insert(0,os.path.dirname(os.path.realpath(__file__)))
