@@ -95,7 +95,7 @@ class EchartOption_clh:
                     "min": 0,
                     "position": "left",
                     "axisLine": {
-                        # "lineStyle": {"color": "#5793f3"}
+                        "lineStyle": {"color": "#5793f3"}
                     },
                     # "axisLabel": {"formatter": "{value} 件"}
                 },
@@ -104,7 +104,7 @@ class EchartOption_clh:
                     "name": "比例",
                     "position": "right",
                     "axisLine": {
-                    # "lineStyle": {"color": "#d14a61"}
+                        # "lineStyle": {"color": "#d14a61"}
                     },
                     # "axisLabel": {"formatter": "{value} °C"}
                 }
