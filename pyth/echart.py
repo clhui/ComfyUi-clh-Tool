@@ -57,14 +57,16 @@ class EchartOption_clh:
             "required": {
                 "title": ("STRING", {"default": "保险"}),
                 "xAxis": ("STRING", {"default": '[ "衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]',"multiline": True}),
-                "data1": ("STRING", {"default": '[1,2,3,4]',"multiline": True}),
                 "data1_name": ("STRING", {"default": "销量","multiline": True}),
                 "data1_type": (["line","bar","pie"], {"default": "line"}),
+                "data1": ("STRING", {"default": '[1,2,3,4]',"multiline": True}),
+                "markLine1": ("STRING", {"default": '0'}),
             },
             "optional": {
                 "data2": ("STRING", {"default": '[1,2,3,4]',"multiline": True}),
                 "data2_name": ("STRING", {"default": "比例","multiline": True}),
                 "data2_type": (["line","bar","pie"], {"default": "line"}),
+                "markLine2": ("STRING", {"default": '0'}),
             }
         }
     RETURN_TYPES = ("STRING",)
@@ -73,76 +75,61 @@ class EchartOption_clh:
     CATEGORY = "simpleTool_clh"
     DESCRIPTION = "the echart  displayed by options."
     OUTPUT_NODE = True
-    def stringify(self, title,xAxis,data1,data1_name,data1_type,data2,data2_name,data2_type):
+    def stringify(self, title,xAxis,data1,data1_name,data1_type,markLine1,data2,data2_name,data2_type,markLine2):
         result = {
-          "title": {"text": "baoku"},
-          "tooltip": {"trigger": "axis"},
-          "legend": {
+            "title": {"text": "baoku"},
+            "tooltip": {"trigger": "axis"},
+            "legend": {
             "data": ["销量1","比例"],
             "left": "center",
-            "bottom": "5%"
-          },
-          "xAxis": {
-            "type": "category",
-            "data": ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
-          },
-          "yAxis": [
-            {
-              "type": "value",
-              "name": "销量1",
-              "min": 0,
-              "position": "left",
-              "axisLine": {
-                "lineStyle": {"color": "#5793f3"}
-              },
-              # "axisLabel": {"formatter": "{value} 件"}
+            "bottom": "10px"
             },
-            {
-              "type": "value",
-              "name": "比例",
-              "position": "right",
-              "axisLine": {
-                "lineStyle": {
-                  "color": "#d14a61"
+            "xAxis": {
+                "type": "category",
+                "data": ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+            },
+            "yAxis": [
+                {
+                    "type": "value",
+                    "name": "销量1",
+                    "min": 0,
+                    "position": "left",
+                    "axisLine": {
+                        # "lineStyle": {"color": "#5793f3"}
+                    },
+                    # "axisLabel": {"formatter": "{value} 件"}
+                },
+                {
+                    "type": "value",
+                    "name": "比例",
+                    "position": "right",
+                    "axisLine": {
+                    # "lineStyle": {"color": "#d14a61"}
+                    },
+                    # "axisLabel": {"formatter": "{value} °C"}
                 }
-              },
-              # "axisLabel": {"formatter": "{value} °C"}
-            }
-          ],
-          "series": [
-            {
-              "name": "销量1",
-              "type": "bar",
-              "data": [50,20,36,10,10,20],
-              "yAxisIndex": 0,
-              "markPoint": {
-                "data": [{"type": "max","name": "最大值"},{"type": "min","name": "最小值"}],
-                "label": {"show": True}
-              }
-            },
-            {
-              "name": "比例",
-              "type": "line",
-              "data": [5,20,36,10,100,20],
-              "yAxisIndex": 1,
-              "markPoint": {
-                "data": [{"type": "max","name": "最大值"},{"type": "min","name": "最小值"}],
-                "label": {"show": True}
-              }
-            }
-          ]
+            ],
+            #数据列表
+            "series": [
+            ]
         }
-        result["series"][1]["name"] = data2_name
-        result["series"][0]["name"] = data1_name
-        result["series"][1]["type"] = data2_type
-        result["series"][0]["type"] = data1_type
-        result["series"][1]["data"] = json.loads(data2)
-        result["series"][0]["data"] = json.loads(data1)
-        result["yAxis"][1]["name"] = data2_name
+        result["series"].append( build_series_opiton(data1_type,data1_name,data1,markLine1,xAxis,result["series"]))
+
+        result["series"].append( build_series_opiton(data2_type,data2_name,data2,markLine2,xAxis,result["series"]))
+        if data1_type == "pie" and data2_type == "pie":
+            # 都是饼图排一下位置
+            result["series"][0]["radius"] = '40%'
+            result["series"][1]["radius"] = '40%'
+            result["series"][0]["center"] = ['30%', '50%']
+            result["series"][1]["center"] = ['70%', '50%']
+        # else:
+        #     result["series"][0]["center"] = None
+        #     result["series"][1]["center"] = None
         result["yAxis"][0]["name"] = data1_name
+        result["yAxis"][1]["name"] = data2_name
         result["xAxis"]["data"] =  json.loads(xAxis)
         result["title"]["text"] = title
-        result["legend"]["data"] = [data1_name,data2_name]
+        result["legend"]["data"] = [data1_name, data2_name]
         # 将字典对象转换为 JSON 字符串
         json_string = json.dumps(result)
         return {
@@ -150,6 +137,61 @@ class EchartOption_clh:
             "ui": {
             }
         }
+def build_series_opiton(data_type,data_name,dataList,markLine,xAxis,series) :
+    if data_type == "pie":
+        pie_option = {
+            "name": data_name,
+            "type": "pie",
+            "radius": "50%",
+            "data": [
+                {"value": 1048, "name": "搜索引擎"},
+                {"value": 735, "name": "直接访问"},
+                {"value": 580, "name": "邮件营销"},
+                {"value": 484, "name": "联盟广告"},
+                {"value": 300, "name": "视频广告"}
+            ],
+            "emphasis": {
+                "itemStyle": {
+                    "shadowBlur": 10,
+                    "shadowOffsetX": 0,
+                    "shadowColor": "rgba(0, 0, 0, 0.5)"
+                }
+            },
+            "label": {
+                "show": True, #// 显示标签
+                "formatter": '{b}: {c} ({d}%)' #// 格式化标签
+            }
+        }
+        combined_list = [{'name': letter, 'value': number} for letter, number in zip(json.loads(xAxis),json.loads(dataList),)]
+        pie_option["data"] = combined_list
+        # pie_option["center"] = None
+        return pie_option
+    else:
+        line_option = {
+            "name": data_name, "type": data_type, "data": json.loads(dataList), "yAxisIndex": len(series),
+            "markPoint": {
+               "data": [{"type": "max", "name": "最大值"}, {"type": "min", "name": "最小值"}],
+               "label": {"show": True}
+           },
+            "markLine": {
+                "data": [
+                    {
+                        "yAxis": markLine,
+                        "name": data_name + '标记线',
+                        "label": {
+                            "show": True,
+                            "formatter": data_name + '的标记线'
+                        },
+                        "lineStyle": {
+                            "type": 'dashed', #// 虚线
+                            "color": 'red', #// 红色
+                            "width": 2 #// 线宽
+                        }}  # 设置基线的y轴值
+                ]
+            }}
+
+        return line_option
+
 
 class EchartOptionByPath_clh(EchartOption_clh):
     @classmethod
@@ -158,31 +200,33 @@ class EchartOptionByPath_clh(EchartOption_clh):
             "required": {
                 "data": ("STRING", {"default": "{}","forceInput":True}),
                 "title": ("STRING", {"default": "保险"}),
-                "xAxis": (
-                "STRING", {"default": '[ "衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]', "multiline": True}),
-                "data1": ("STRING", {"default": '[1,2,3,4]', "multiline": True}),
-                "data1_name": ("STRING", {"default": "销量", "multiline": True}),
+                "xAxis": ( "STRING", {"default": '$.data[0].0.name', "multiline": False,"title":"X轴类别"}),
+                "data1_name": ("STRING", {"default": "销量", "multiline": False}),
                 "data1_type": (["line", "bar", "pie"], {"default": "line"}),
+                "data1": ("STRING", {"default": '$.data[0].0.name', "multiline": False}),
+                "markLine1": ("STRING", {"default": '0'}),
             },
             "optional": {
-                "data2": ("STRING", {"default": '[1,2,3,4]', "multiline": True}),
-                "data2_name": ("STRING", {"default": "比例", "multiline": True}),
+                "data2_name": ("STRING", {"default": "比例", "multiline": False}),
                 "data2_type": (["line", "bar", "pie"], {"default": "line"}),
+                "data2": ("STRING", {"default": '$.data[0].0.name', "multiline": False}),
+                "markLine2": ("STRING", {"default": '0'}),
             }
         }
 
     FUNCTION = "stringify_by_path"
 
-    def stringify_by_path(self,data, title,xAxis,data1,data1_name,data1_type,data2,data2_name,data2_type):
+    def stringify_by_path(self,data, title,xAxis,data1,data1_name,data1_type,markLine1,data2,data2_name,data2_type,markLine2):
 
         return self.stringify( title,
                                json.dumps( extract_values(json.loads(data), xAxis)),
                                json.dumps(extract_values(json.loads(data), data1)),
                                data1_name,
                                data1_type,
+                               markLine1,
                                json.dumps(extract_values(json.loads(data), data2)),
                                data2_name,
-                               data2_type)
+                               data2_type,markLine2)
 # 取路径下的值
 def get_value_by_jsonpath(obj, jsonpath):
     # 去掉路径字符串开头的 '$'

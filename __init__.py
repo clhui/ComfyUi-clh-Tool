@@ -17,6 +17,7 @@ node_list = [
     "logic",
     "math_expression",
     "echart",
+    "show_text",
 ]
 
 NODE_CLASS_MAPPINGS = {}

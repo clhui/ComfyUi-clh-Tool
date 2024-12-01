@@ -297,11 +297,11 @@ function initChart(element){
             },{
                 name: '比例',
                 type: 'line',
-                    axisLine: {
-                        lineStyle: {
-                            color: '#d14a61'
-                        }
-                    },
+                axisLine: {
+                    lineStyle: {
+                        color: '#d14a61'
+                    }
+                },
                 data: [5, 20, 36, 10, 10, 20],
                 // 对应第二个 y 轴
                 yAxisIndex: 1 ,
@@ -341,24 +341,24 @@ function initChart(element){
                     }
                 }
             },{
-                    name: '访问来源',
-                    type: 'pie',
-                    radius: '50%',  // 设置饼图的半径
-                    data: [
-                        {value: 1048, name: '搜索引擎'},
-                        {value: 735, name: '直接访问'},
-                        {value: 580, name: '邮件营销'},
-                        {value: 484, name: '联盟广告'},
-                        {value: 300, name: '视频广告'}
-                    ],
-                    emphasis: {
-                        itemStyle: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
-                        }
+                name: '访问来源',
+                type: 'pie',
+                radius: '50%',  // 设置饼图的半径
+                data: [
+                    {value: 1048, name: '搜索引擎'},
+                    {value: 735, name: '直接访问'},
+                    {value: 580, name: '邮件营销'},
+                    {value: 484, name: '联盟广告'},
+                    {value: 300, name: '视频广告'}
+                ],
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
                     }
-                }]
+                }
+            }]
         };
 
         // 使用刚指定的配置项和数据显示图表

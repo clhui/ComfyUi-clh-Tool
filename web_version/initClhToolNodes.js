@@ -187,7 +187,6 @@ app.registerExtension({
 					return r
 				}
 				break;
-
 		}
 
 	},
