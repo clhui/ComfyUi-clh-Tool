@@ -171,10 +171,27 @@ class SomethingToString_clh:
 
         return (stringified,)
 
+class StringConstant:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "value": ("STRING", {"default": ' ', "multiline": True}),
+            },
+        }
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("value",)
+    FUNCTION = "get_value"
+    CATEGORY = "simpleTool_clh/constants"
+
+    def get_value(self, value):
+        return (value,)
+
 
 NODE_CLASS_MAPPINGS = {
     "JoinStringMulti_clh": JoinStringMulti_clh,
-    "SomethingToString_clh": SomethingToString_clh
+    "SomethingToString_clh": SomethingToString_clh,
+    "StringConstant_clh":StringConstant
 
 }
 

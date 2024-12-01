@@ -16,6 +16,7 @@ node_list = [
     "fat_labels",
     "logic",
     "math_expression",
+    "echart",
 ]
 
 NODE_CLASS_MAPPINGS = {}

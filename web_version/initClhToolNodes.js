@@ -1,6 +1,7 @@
 import { api } from "../../../scripts/api.js";
 import { app } from "../../../scripts/app.js";
 import { RenderAllUeLinks } from "./use_links_ui.js";
+import { chartGraphWidget,addChartWidget,updateChartOption } from "./echart/extras_node_widgets.js";
 
 app.registerExtension({
     name:"clhTool-extension",
@@ -70,14 +71,14 @@ app.registerExtension({
 					return v;
                 }
 //				记录默认事件动作
-				const onVRAM_DebugExecuted = nodeType.prototype.onExecuted;
-				nodeType.prototype.onExecuted = function(message) {
+				const MathExpression_DebugExecuted = nodeType.prototype.onExecuted;
+				nodeType.prototype.onExecuted = function(result) {
 //				    执行默认事件动作
-					const r = onVRAM_DebugExecuted? onVRAM_DebugExecuted.apply(this,arguments): undefined
-					let values = message["value"].toString().split('x');
+					const r = MathExpression_DebugExecuted? MathExpression_DebugExecuted.apply(this,arguments): undefined
+					let values = result["value"].toString().split('x');
 					const result_to_label = this.widgets.find(w => w.name === "result_to_label")["value"];
 					if(result_to_label){
-						this.title = result_to_label+ values;
+						this.title = result_to_label + values;
 					}
 					return r
 				}
@@ -162,6 +163,28 @@ app.registerExtension({
 //
 //					});
 
+				}
+				break;
+			case "EchartGraph_clh":
+				const EchartGraphCreated = nodeType.prototype.onNodeCreated || function() {};
+
+				nodeType.prototype.onNodeCreated = function () {
+					EchartGraphCreated.apply(this, arguments);
+					this.inputs_offset = nodeData.name.includes("selective") ? 1 : 0;
+                    //添加小组件（组件类型，组件名，组件）
+//					this.addCustomWidget(chartGraphWidget(this, "clhTool_chart", true));
+                    addChartWidget(this,"clhTool_chart",{  },app)
+				}
+
+//				记录默认事件动作
+				const EchartGraph_clh_OnExecuted = nodeType.prototype.onExecuted;
+				nodeType.prototype.onExecuted = function(result) {
+//				    执行默认事件动作
+					const r = EchartGraph_clh_OnExecuted? EchartGraph_clh_OnExecuted.apply(this,arguments): undefined
+					this.chartOptions = result
+					updateChartOption(this,result);
+
+					return r
 				}
 				break;
 

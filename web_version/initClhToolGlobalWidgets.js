@@ -42,15 +42,15 @@ app.registerExtension({
             }
           }
 
-          if (nodeData?.output) {
-            for (const out of nodeData.output) {
-              if (["STRING"].includes(out)) {
-                nodeIsMultiString = true;
-                outputNode = true;
-                break;
-              }
-            }
-          }
+//          if (nodeData?.output) {
+//            for (const out of nodeData.output) {
+//              if (["STRING"].includes(out)) {
+//                nodeIsMultiString = true;
+//                outputNode = true;
+//                break;
+//              }
+//            }
+//          }
 
           if (nodeIsMultiString) {
             // Node Created
@@ -76,7 +76,7 @@ app.registerExtension({
 //                }, 16 * this.widgets.length)
 //              );
 
-              if (!isIncludesSpeech && widgetsTextMulti.length) {
+              if (!isIncludesSpeech && widgetsTextMulti?.length) {
                 widgetsTextMulti.forEach(async (textWidget) => {
 
 				  //添加全自定义节点 constructor
