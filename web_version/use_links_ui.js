@@ -4,8 +4,6 @@ import { app } from "../../../scripts/app.js";
     流动样式
 */
 export class RenderAllUeLinks {
-
-
     static queue_size = null;
     static note_queue_size(x) { this.queue_size = x; }
     static render_all_ue_links(ctx) {
@@ -41,7 +39,7 @@ export class RenderAllUeLinks {
         });
 
         
-        if (animate>0) {
+        if (animate > 0) {
             /*
             If animating, we want to mark the visuals as changed so the animation updates - but not often!
             If links shown:
@@ -73,6 +71,7 @@ export class RenderAllUeLinks {
                 var animate = app.ui.settings.getSettingValue('clhTool.links.animateType', 1);
                 if(animate){
 //                    this.render_all_ue_links(app.canvas.ctx)
+                    //重新渲染
                     app.graph.change.bind(app.graph)();
                     this.setLinkTimeout(ctx);
                 }
@@ -88,6 +87,10 @@ export class RenderAllUeLinks {
 //            const node = get_real_node(ue_connection.sending_to.id);
             const start_node = app.canvas.graph.getNodeById(ue_connection.origin_id)
             const target_node = app.canvas.graph.getNodeById(ue_connection.target_id)
+            if(start_node.type != 'MathExpression_clh' && target_node.type != 'MathExpression_clh'){
+                //只渲染计算节点
+                return;
+            }
             /* this is the end node; get the position of the input */
             const pos1 = start_node.getConnectionPos(false, ue_connection.origin_slot, this.slot_pos2);
             var pos2 = target_node.getConnectionPos(true, ue_connection.target_slot, this.slot_pos1);
@@ -129,19 +132,73 @@ export class RenderAllUeLinks {
           var max_count = 1;
           //循环周期 ，单位：秒
           var cycle_period = 5
+          // 计算 A 和 B 之间的距离
+          const d = Math.sqrt((a[0] - b[0])**2 + (a[1] - b[1])**2)
           for (var i2 = 0; i2 < max_count; ++i2) {
-            //计算第i个点的位置百分百 根据当前时间计算第一个点位置，再加上后面点的偏移，就可知道当前点的位置
-            var f = (LiteGraph.getTime() * 1e-3 /cycle_period + i2 * 1.0 /max_count) % 1;
-            var pos2 = app.canvas.computeConnectionPoint(
-              a,
-              b,
-              f,
-              start_dir,
-              end_dir
-            );
-            ctx.beginPath();
-            ctx.arc(pos2[0], pos2[1], 5, 0, 2 * Math.PI);
-            ctx.fill();
+                //计算第i个点的位置百分百 根据当前时间计算第一个点位置，再加上后面点的偏移，就可知道当前点的位置
+                var f = (LiteGraph.getTime() * 1e-3 /cycle_period + i2 * 1.0 /max_count) % 1;
+                var pos1 = app.canvas.computeConnectionPoint(
+                                  a,
+                                  b,
+                                  f,
+                                  start_dir,
+                                  end_dir
+                                );
+                var pos_next = app.canvas.computeConnectionPoint(
+                              a,
+                              b,
+                              f + (10/d),
+                              start_dir,
+                              end_dir
+                            );
+                ctx.beginPath();
+                //画圆
+//                ctx.arc(pos1[0], pos1[1], 5, 0, 2 * Math.PI);
+//                ctx.fill();
+
+                //画箭头
+
+                // 顶点A和中心点B的坐标（可以修改为你需要的值）
+                // 计算 A 和 B 之间的距离
+//                const d_next = Math.sqrt((pos1[0] - pos_next[0])**2 + (pos1[1] - pos_next[1])**2)
+//                const x_mult_to_5 = 5.0/d_next
+//                const pointA = { x: (pos1[0] + x_mult_to_5 *(pos_next[0] - pos1[0])  ), y: (pos1[1] + y_mult_to_5 *(pos_next[1] - pos1[1]) ) };
+                const pointA = { x: pos_next[0], y: pos_next[1] };
+                const pointB = { x: pos1[0], y: pos1[1] };
+                // 计算从中心B到顶点A的向量
+                const vectorAB = { x: pointA.x - pointB.x, y: pointA.y - pointB.y };
+
+                // 计算旋转矩阵（60度，即π/3弧度，和-60度，即-π/3弧度）
+                const angle60 = Math.PI / 3;
+                const cos60 = Math.cos(angle60*2);
+                const sin60 = Math.sin(angle60*2);
+
+                // 利用旋转矩阵计算另外两个顶点的坐标（相对于中心B）
+                const pointC = {
+                  x: pointB.x + cos60 * vectorAB.x - sin60 * vectorAB.y,
+                  y: pointB.y + sin60 * vectorAB.x + cos60 * vectorAB.y
+                };
+
+                const pointD = {
+                  x: pointB.x + cos60 * vectorAB.x + sin60 * vectorAB.y, // 注意这里的符号与C点相反
+                  y: pointB.y - sin60 * vectorAB.x + cos60 * vectorAB.y  // 因为我们是旋转-60度得到D点
+                };
+
+                // 绘制等边三角形
+                ctx.beginPath();
+                ctx.moveTo(pointA.x, pointA.y);
+                ctx.lineTo(pointC.x, pointC.y);
+                ctx.lineTo(pointB.x, pointB.y);
+                ctx.lineTo(pointD.x, pointD.y);
+                ctx.lineTo(pointA.x, pointA.y);
+                ctx.closePath();
+
+                // 设置样式并填充
+                ctx.fill();
+
+                // 绘制边框
+//                ctx.fillStyle = 'rgba(0, 128, 0, 0.5)';
+//                ctx.stroke();
           }
 
    }
