@@ -1,5 +1,5 @@
-import { api } from "../../../scripts/api.js";
-import { app } from "../../../scripts/app.js";
+import { api } from "/scripts/api.js";
+import { app } from "/scripts/app.js";
 
 import {
   translateBtnWidget,getPostition
@@ -42,15 +42,6 @@ app.registerExtension({
             }
           }
 
-//          if (nodeData?.output) {
-//            for (const out of nodeData.output) {
-//              if (["STRING"].includes(out)) {
-//                nodeIsMultiString = true;
-//                outputNode = true;
-//                break;
-//              }
-//            }
-//          }
 
           if (nodeIsMultiString) {
             // Node Created

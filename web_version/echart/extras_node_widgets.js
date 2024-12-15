@@ -4,13 +4,9 @@
  * Github: https://github.com/AlekPet/ComfyUI_Custom_Nodes_AlekPet/tree/master/ExtrasNode
  */
 
-import {
-	app
-} from "../../../scripts/app.js";
-import {
-	$el
-} from "../../../scripts/ui.js";
-//import { rgbToHex, isValidStyle } from "../../utils.js";
+import {app} from "/scripts/app.js";
+import {$el} from "/scripts/ui.js";
+//import { rgbToHex, isValidStyle } from "/extensions/ComfyUi-clh-Tool/extensions/core/node_modules/utils.js";
 //import { RecognationSpeechDialog } from "./extras_node_dialogs.js";
 import  "./echarts.min.js"
 const CONVERTED_TYPE = "converted-widget";
@@ -41,25 +37,6 @@ function getPostition(ctx, w_width, y, n_height, wInput) {
 	};
 }
 
-function getVoiceAndSettings() {
-	const voices = speechSynthesis.getVoices();
-
-	const {
-		voice,
-		volume,
-		pitch,
-		rate
-	} =
-	RecognationSpeechDialog.getSettingsRecSpeechLS();
-	const voiceSelected = voices.filter((v) => v.name === voice);
-
-	return {
-		voice: voiceSelected.length ? voiceSelected[0] : null,
-		volume,
-		pitch,
-		rate,
-	};
-}
 
 
 function chartGraphWidget(node, inputName, inputData) {

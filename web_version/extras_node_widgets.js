@@ -4,8 +4,8 @@
  * Github: https://github.com/AlekPet/ComfyUI_Custom_Nodes_AlekPet/tree/master/ExtrasNode
  */
 
-import { app } from "../../../scripts/app.js";
-import { $el } from "../../../scripts/ui.js";
+import { app } from "/scripts/app.js";
+import { $el } from "/scripts/ui.js";
 //import { rgbToHex, isValidStyle } from "../../utils.js";
 //import { RecognationSpeechDialog } from "./extras_node_dialogs.js";
 

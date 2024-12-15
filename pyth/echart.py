@@ -227,37 +227,6 @@ class EchartOptionByPath_clh(EchartOption_clh):
                                json.dumps(extract_values(json.loads(data), data2)),
                                data2_name,
                                data2_type,markLine2)
-# 取路径下的值
-def get_value_by_jsonpath(obj, jsonpath):
-    # 去掉路径字符串开头的 '$'
-    if jsonpath.startswith('$.'):
-        jsonpath = jsonpath[2:]
-
-    # 分割路径为各个部分
-    parts = jsonpath.split('.')
-
-    # 初始化当前对象为传入的对象
-    current = obj
-
-    # 遍历路径的各个部分
-    for part in parts:
-        # 检查部分是否包含 '[]' 表示索引
-        if '[' in part and ']' in part:
-            # 提取索引值
-            index = int(part[part.index('[') + 1 : part.index(']')])
-            # 根据索引获取当前对象的对应元素
-            current = current[index]
-        else:
-            # 根据属性名获取当前对象的对应属性
-            current = current[part]
-
-        # 如果当前对象为 None，则路径无效，返回 None
-        if current is None:
-            return None
-
-    # 返回最终获取的值
-    return current
-
 
 def extract_values(data, path):
     path = path.replace("[", ".[")
@@ -309,6 +278,7 @@ def extract_values(data, path):
     # 否则，直接返回当前层级的值
     else:
         return current_level
+
 
 
 NODE_CLASS_MAPPINGS = {

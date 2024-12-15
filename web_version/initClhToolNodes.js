@@ -1,7 +1,11 @@
-import { api } from "../../../scripts/api.js";
-import { app } from "../../../scripts/app.js";
+import { api } from "/scripts/api.js";
+import { app } from "/scripts/app.js";
 import { RenderAllUeLinks } from "./use_links_ui.js";
 import { chartGraphWidget,addChartWidget,updateChartOption } from "./echart/extras_node_widgets.js";
+import { codeMirrorWidget,addCodeMirrorWidget,exeCodeMirror } from "./codemirror/extras_node_widgets.js";
+import {javascript} from "/extensions/ComfyUi-clh-Tool/extensions/core/node_modules/@codemirror/lang-javascript/dist/index.js"
+import { EditorView, basicSetup } from "/extensions/ComfyUi-clh-Tool/extensions/core/node_modules/codemirror/dist/index.js";
+//import { javascript } from "@codemirror/lang-javascript";
 
 app.registerExtension({
     name:"clhTool-extension",
@@ -10,7 +14,7 @@ app.registerExtension({
 
     },
 	async beforeRegisterNodeDef(nodeType, nodeData, app) {
-		if(!nodeData?.category?.endsWith("_clh") || !nodeData?.name?.endsWith("_clh")) {
+		if(!nodeData?.category?.includes("_clh") || !nodeData?.name?.endsWith("_clh")) {
 			// console.log("bx-extension，beforeRegisterNodeDef",nodeData.category)
 			return;
 		}
@@ -187,6 +191,37 @@ app.registerExtension({
 					return r
 				}
 				break;
+			case "JavaScript_clh":
+				const JavaScriptCreated = nodeType.prototype.onNodeCreated || function() {};
+				nodeType.prototype.onNodeCreated = function () {
+					JavaScriptCreated.apply(this, arguments);
+                    //初始化参数组件
+                    const value_of_inputs = this.inputs.filter(w => w.name == "param");
+                    const node = this;
+                    value_of_inputs[0].widget.serializeValue =  () => {
+                        var link = app.graph.links.filter(link =>link.id == value_of_inputs[0].link)[0];
+                        var a = node
+                        return [[link.id, link.origin_slot],]
+                    };
+				}
+
+//				记录默认事件动作
+				const JavaScript_clh_OnExecuted = nodeType.prototype.onExecuted;
+				nodeType.prototype.onExecuted = function(result) {
+//				    执行默认事件动作
+					const r = JavaScript_clh_OnExecuted ? JavaScript_clh_OnExecuted.apply(this,arguments): result
+//					exeCodeMirror(this, result);
+
+					return r
+				}
+                // Node Created
+//                const onNodeCreatedJavaScript = nodeType.prototype.onNodeCreated;
+//                nodeType.prototype.onNodeCreated = function () {
+//                    const ret = onNodeCreatedJavaScript? onNodeCreatedJavaScript.apply(this, arguments) : undefined;
+//                    addCodeMirrorWidget(this,"clhTool_codemirror",{  },app)
+//                    return ret;
+//                };
+				break;
 		}
 
 	},
@@ -203,5 +238,19 @@ app.registerExtension({
             RenderAllUeLinks.note_queue_size(detail ? detail.exec_info.queue_remaining : 0)
         });
         console.log("注册clhTool扩展！")
+    },
+    async getCustomWidgets() {
+        return {
+            CLHCODE(node, inputName, inputData) {
+
+                const defaultVal = inputData[1].default || "";
+                return addCodeMirrorWidget(node, inputName, { defaultVal, ...inputData[1] }, app);
+
+            }
+        }
     }
 })
+
+api.addEventListener("execution_start", (node , prompt_id, output)=>{
+    console.log(node,prompt_id,output);
+});

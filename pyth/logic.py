@@ -187,11 +187,32 @@ class StringConstant:
     def get_value(self, value):
         return (value,)
 
+class JavaScript:
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "codeMirror": ("CLHCODE", {"default": 'console.log("Hello world！"); \n return "{}";', "multiline": True}),
+            },
+            "optional": {
+                "param": ("STRING", {"default": '{"a":123}', "forceInput": True}),
+
+            },
+        }
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("codeStr1",)
+    FUNCTION = "get_script"
+    CATEGORY = "simpleTool_clh/logic"
+    OUTPUT_NODE = True
+    def get_script(self, codeMirror, param):
+        return {"ui": {"text": "codeStr"}, "result": (codeMirror['inputValue'][1],)}
+
 
 NODE_CLASS_MAPPINGS = {
     "JoinStringMulti_clh": JoinStringMulti_clh,
     "SomethingToString_clh": SomethingToString_clh,
-    "StringConstant_clh":StringConstant
+    "StringConstant_clh":StringConstant,
+    "JavaScript_clh":JavaScript
 
 }
 

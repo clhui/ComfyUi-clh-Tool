@@ -1,4 +1,4 @@
-import { ComfyDialog } from "../../../scripts/ui.js";
+import { ComfyDialog } from "/scripts/ui.js";
 //import { makeElement } from "../../utils.js";
 //import { speakSynthesisUtterance } from "./extras_node_widgets.js";
 

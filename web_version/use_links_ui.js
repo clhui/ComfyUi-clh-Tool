@@ -1,5 +1,5 @@
-import { ComfyWidgets } from "../../../scripts/widgets.js";
-import { app } from "../../../scripts/app.js";
+import { ComfyWidgets } from "/scripts/widgets.js";
+import { app } from "/scripts/app.js";
 /**
     流动样式
 */
@@ -27,16 +27,18 @@ export class RenderAllUeLinks {
 //        this.animate_step(ctx);
         var any_links_shown = false;
         var any_links = false;
+        if(app.canvas.graph?.links instanceof Array){
 
-        app.canvas.graph.links.forEach((ue_connection) => {
-            any_links = true;
-            var show = app.ui.settings.getSettingValue('clhTool.links.animate', false);
+            app.canvas.graph?.links?.forEach((ue_connection) => {
+                any_links = true;
+                var show = app.ui.settings.getSettingValue('clhTool.links.animate', false);
 
-            if ( show ) {
-                this._render_ue_link(ue_connection, ctx, animate);
-                any_links_shown = true;
-            }
-        });
+                if ( show ) {
+                    this._render_ue_link(ue_connection, ctx, animate);
+                    any_links_shown = true;
+                }
+            });
+        }
 
         
         if (animate > 0) {
