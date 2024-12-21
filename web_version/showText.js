@@ -3,7 +3,7 @@ import { ComfyWidgets } from "/scripts/widgets.js";
 
 // Displays input text on a node
 app.registerExtension({
-	name: "pysssss.ShowText",
+	name: "pysssss.ShowText.clh",
 	async beforeRegisterNodeDef(nodeType, nodeData, app) {
 		if (nodeData.name === "ShowText|clh") {
 			function populate(text) {
