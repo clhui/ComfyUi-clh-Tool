@@ -5,25 +5,31 @@ import { ComfyWidgets } from "/scripts/widgets.js";
 app.registerExtension({
 	name: "pysssss.ShowText.clh",
 	async beforeRegisterNodeDef(nodeType, nodeData, app) {
-		if (nodeData.name === "ShowText|clh") {
+		if (nodeData.name === "ShowText_clh") {
 			function populate(text) {
-				if (this.widgets) {
-					for (let i = 1; i < this.widgets.length; i++) {
-						this.widgets[i].onRemove?.();
-					}
-					this.widgets.length = 1;
-				}
+//				if (this.widgets) {
+//					for (let i = 1; i < this.widgets.length; i++) {
+//						this.widgets[i].onRemove?.();
+//					}
+//					this.widgets.length = 1;
+//				}
 
 				const v = [...text];
 				if (!v[0]) {
 					v.shift();
 				}
-				for (const list of v) {
-					const w = ComfyWidgets["STRING"](this, "text2", ["STRING", { multiline: true }], app).widget;
-					w.inputEl.readOnly = true;
-					w.inputEl.style.opacity = 0.6;
-					w.value = list;
+				if (this.widgets) {
+					this.widgets[1].value = v.join("\n");
+					this.widgets[1].inputEl.readOnly = true;
+					this.widgets[1].inputEl.style.color = '#ffffff';
+					this.widgets[1].inputEl.style.fontSize = '16px';
 				}
+//				for (const list of v) {
+//					const w = ComfyWidgets["STRING"](this, "text2", ["STRING", { multiline: true }], app).widget;
+//					w.inputEl.readOnly = true;
+//					w.inputEl.style.opacity = 0.6;
+//					w.value = list;
+//				}
 
 				requestAnimationFrame(() => {
 					const sz = this.computeSize();
@@ -49,7 +55,7 @@ app.registerExtension({
 			nodeType.prototype.onConfigure = function () {
 				onConfigure?.apply(this, arguments);
 				if (this.widgets_values?.length) {
-					populate.call(this, this.widgets_values.slice(+this.widgets_values.length > 1));
+					populate.call(this, this.widgets_values[0]);
 				}
 			};
 		}
