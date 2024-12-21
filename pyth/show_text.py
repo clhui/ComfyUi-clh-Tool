@@ -41,9 +41,9 @@ class ShowText:
 
 
 NODE_CLASS_MAPPINGS = {
-    "ShowText|clh": ShowText,
+    "ShowText_clh": ShowText,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "ShowText|clh": "Show Text ",
+    "ShowText_clh": "Show Text ",
 }
