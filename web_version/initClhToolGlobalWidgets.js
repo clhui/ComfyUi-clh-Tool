@@ -31,7 +31,7 @@ app.registerExtension({
 
           if (nodeData?.input && nodeData?.input?.required) {
             for (const inp of Object.keys(nodeData.input.required)) {
-              if (nodeData.input.required[inp][1]?.multiline) {
+              if (nodeData.input.required[inp][1]?.multiline || nodeData.name.toLocaleLowerCase().includes("showtext")) {
                 const type = nodeData.input.required[inp][0];
 
                 if (["STRING"].includes(type)) {
