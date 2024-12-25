@@ -9,6 +9,6 @@ Repository = "https://github.com/clhui/ComfyUi-clh-Tool"
 #  Used by Comfy Registry https://comfyregistry.org
 
 [tool.comfy]
-PublisherId = ""
+PublisherId = "clhui"
 DisplayName = "ComfyUi-clh-Tool"
 Icon = ""
