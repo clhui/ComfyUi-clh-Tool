@@ -154,7 +154,7 @@ function addCodeMirrorWidget(node, name, opts, app) {
 
     const widget = node.addDOMWidget(name, 'CodeMirrorWidget', inputEl, {
         getValue() {
-            return {inputValue :[myCodeMirror.state.doc.toString(),widget.exeCodeResult ]}
+            return {inputValue :[myCodeMirror.state.doc.toString(), widget.exeCodeResult ]}
         },
         setValue(v) {
             var value = v
@@ -174,7 +174,7 @@ function addCodeMirrorWidget(node, name, opts, app) {
         },
         node
     })
-    //进队列之前计算
+    //进队列之前计算,先执行脚本，再传到后台
     widget.beforeQueued = () => {
         widget.exeCodeResult = exeCodeMirror(node)
     };
