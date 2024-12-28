@@ -205,7 +205,7 @@ class JavaScript:
     CATEGORY = "simpleTool_clh/logic"
     OUTPUT_NODE = True
     def get_script(self, codeMirror,):
-        return {"ui": {"text": "codeStr"}, "result": (codeMirror['inputValue'][1],)}
+        return {"ui": {"text": "codeStr"}, "result": (json.dumps(codeMirror['inputValue'][1]),)}
 
 
 NODE_CLASS_MAPPINGS = {
