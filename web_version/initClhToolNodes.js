@@ -196,13 +196,13 @@ app.registerExtension({
 				nodeType.prototype.onNodeCreated = function () {
 					JavaScriptCreated.apply(this, arguments);
                     //初始化参数组件
-                    const value_of_inputs = this.inputs.filter(w => w.name == "param");
+//                    const value_of_inputs = this.inputs.filter(w => w.name == "param");
                     const node = this;
-                    value_of_inputs[0].widget.serializeValue =  () => {
-                        var link = app.graph.links.filter(link =>link.id == value_of_inputs[0].link)[0];
-                        var a = node
-                        return [[link.id, link.origin_slot],]
-                    };
+//                    value_of_inputs[0].widget.serializeValue =  () => {
+//                        var link = app.graph.links.filter(link =>link.id == value_of_inputs[0].link)[0];
+//                        var a = node
+//                        return [[link.id, link.origin_slot],]
+//                    };
 				}
 
 //				记录默认事件动作

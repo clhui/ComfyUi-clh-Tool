@@ -174,9 +174,11 @@ function addCodeMirrorWidget(node, name, opts, app) {
         },
         node
     })
+    //进队列之前计算
     widget.beforeQueued = () => {
         widget.exeCodeResult = exeCodeMirror(node)
     };
+    //序列化时执行
 //    widget.serializeValue =  () => {
 //        widget.exeResult = exeCodeMirror(node)
 //        return [myCodeMirror.state.doc.toString(),widget.exeCodeResult ]
@@ -212,14 +214,14 @@ function initCodeMirror(element){
 function exeCodeMirror(node, result){
 	const value_of_inputs = node.widgets.filter(w => w.name == "param");
 
-    var param =  value_of_inputs[0].value
+//    var param =  value_of_inputs[0].value
     var myCodeMirror =  node.myCodeMirror
     const codeString =  myCodeMirror.state.doc.toString();
     if(myCodeMirror){
         if(codeString){
             try {
                 const func = new Function( "param", "" + codeString + "");
-                var resultString = func(param); // 输出: Hello, world!
+                var resultString = func(); // 输出: Hello, world!
                 node.setOutputData(0,resultString)
                 return resultString;
             } catch (e) {

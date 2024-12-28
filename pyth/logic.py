@@ -195,7 +195,7 @@ class JavaScript:
                 "codeMirror": ("CLHCODE", {"default": 'console.log("Hello world！"); \n return "{}";', "multiline": True}),
             },
             "optional": {
-                "param": ("STRING", {"default": '{"a":123}', "forceInput": True}),
+                # "param": ("STRING", {"default": '{"a":123}', "forceInput": True}),
 
             },
         }
@@ -204,7 +204,7 @@ class JavaScript:
     FUNCTION = "get_script"
     CATEGORY = "simpleTool_clh/logic"
     OUTPUT_NODE = True
-    def get_script(self, codeMirror, param):
+    def get_script(self, codeMirror,):
         return {"ui": {"text": "codeStr"}, "result": (codeMirror['inputValue'][1],)}
 
 
