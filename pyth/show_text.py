@@ -4,7 +4,7 @@ class ShowText:
         return {
             "required": {
                 "text": ("STRING", {"forceInput": True}),
-                "text2": ("STRING", { "multiline": True,"readOnly": True},)
+                "text2": ("STRING", { "multiline": True},)
             },
             "hidden": {
                 "unique_id": "UNIQUE_ID",
@@ -20,7 +20,7 @@ class ShowText:
 
     CATEGORY = "simpleTool_clh/utils"
 
-    def notify(self, text, unique_id=None, extra_pnginfo=None):
+    def notify(self, text,text2, unique_id=None, extra_pnginfo=None):
         if unique_id is not None and extra_pnginfo is not None:
             if not isinstance(extra_pnginfo, list):
                 print("Error: extra_pnginfo is not a list")
