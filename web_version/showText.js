@@ -50,8 +50,22 @@ app.registerExtension({
 				onConfigure?.apply(this, arguments);
 				if (this.widgets_values?.length) {
 					populate.call(this, this.widgets_values.slice(+this.widgets_values.length > 1));
+				}else{
+					populate.call(this, "展示位置");
 				}
 			};
+			// Node Created
+            const onNodeCreated = nodeType.prototype.onNodeCreated;
+            nodeType.prototype.onNodeCreated = function () {
+                if (this.widgets_values?.length) {
+					populate.call(this, this.widgets_values.slice(+this.widgets_values.length > 1));
+				}else{
+					populate.call(this, "展示位置");
+				}
+                const ret = onNodeCreated
+                            ? onNodeCreated.apply(this, arguments)
+                            : undefined;
+            };
 		}
 	},
 });

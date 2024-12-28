@@ -4,6 +4,7 @@ class ShowText:
         return {
             "required": {
                 "text": ("STRING", {"forceInput": True}),
+                "text2": ("STRING", { "multiline": True,"readOnly": True},)
             },
             "hidden": {
                 "unique_id": "UNIQUE_ID",
