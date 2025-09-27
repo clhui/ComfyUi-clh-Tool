@@ -236,6 +236,9 @@ class LargeDuplicateChecker:
         self.log(f"🚀 开始两阶段处理文件 (使用 {self.max_workers} 个线程)")
         self.log(f"📊 待处理文件总数: {len(large_files)} 个")
         
+        # 重置processed_files计数器
+        self.processed_files = 0
+        
         # 过滤出未处理的文件
         unprocessed_files = [(path, size) for path, size in large_files 
                            if path not in self.processed_file_set]
@@ -280,10 +283,29 @@ class LargeDuplicateChecker:
         quick_scan_time = time.time() - start_time
         self.log(f"✅ 快速扫描完成！耗时: {quick_scan_time:.2f} 秒")
         self.log(f"📊 快速扫描成功: {quick_scan_success} 个文件")
+        self.log(f"📈 快速扫描统计: 生成了 {len(self.quick_hashes)} 个不同的快速哈希值")
         
         # 分析快速扫描结果，找出可能的重复文件
         self.log("🔍 分析快速扫描结果...")
+        self.log(f"📋 快速哈希分布统计:")
+        
+        # 统计快速哈希分布
+        single_file_hashes = 0
+        duplicate_candidate_hashes = 0
+        total_duplicate_candidates = 0
+        
+        for quick_hash, files in self.quick_hashes.items():
+            if len(files) == 1:
+                single_file_hashes += 1
+            else:
+                duplicate_candidate_hashes += 1
+                total_duplicate_candidates += len(files)
+        
+        self.log(f"   ✅ 唯一文件: {single_file_hashes} 个哈希值 (无需验证)")
+        self.log(f"   ⚠️  疑似重复: {duplicate_candidate_hashes} 个哈希值，涉及 {total_duplicate_candidates} 个文件")
+        
         potential_duplicate_paths = set()
+        quick_hash_groups = {}  # 用于记录每个快速哈希对应的文件组
         
         for quick_hash, files in self.quick_hashes.items():
             if len(files) > 1:
@@ -291,6 +313,7 @@ class LargeDuplicateChecker:
                 # files 是 (file_path, file_size) 元组的列表，需要提取文件路径
                 file_paths = [file_info[0] for file_info in files]
                 potential_duplicate_paths.update(file_paths)
+                quick_hash_groups[quick_hash] = files
                 file_names = [os.path.basename(path) for path in file_paths]
                 self.log(f"⚠️  发现 {len(files)} 个文件具有相同的快速哈希 {quick_hash[:8]}...")
                 self.log(f"   📁 文件列表: {', '.join(file_names)}")
@@ -306,7 +329,18 @@ class LargeDuplicateChecker:
         # 第二阶段：完整验证
         self.log("=" * 60)
         self.log(f"🔍 第二阶段：完整验证 ({len(potential_duplicates)} 个文件)")
+        self.log("💡 验证原因：这些文件在快速扫描中具有相同的哈希值，需要完整验证以确认是否真正重复")
         self.log("=" * 60)
+        
+        # 显示每个文件的验证原因
+        for file_path, file_size in potential_duplicates:
+            # 找到这个文件属于哪个快速哈希组
+            for quick_hash, files in quick_hash_groups.items():
+                if any(f[0] == file_path for f in files):
+                    group_files = [os.path.basename(f[0]) for f in files]
+                    self.log(f"🔍 {os.path.basename(file_path)} -> 与 {len(files)-1} 个文件快速哈希相同 ({quick_hash[:8]}...)")
+                    self.log(f"   📋 同组文件: {', '.join(group_files)}")
+                    break
         
         verification_start = time.time()
         
@@ -394,6 +428,9 @@ class LargeDuplicateChecker:
         """两阶段重复文件检测，先快速扫描再完整验证"""
         if not large_files:
             return {}
+        
+        # 设置总文件数
+        self.total_files = len(large_files)
         
         # 使用两阶段处理
         self.process_files_two_phase(large_files)
