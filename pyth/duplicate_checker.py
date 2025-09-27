@@ -251,9 +251,9 @@ class LargeDuplicateChecker:
         self.log(f"⏭️  已跳过的文件: {len(large_files) - len(unprocessed_files)} 个")
         
         # 第一阶段：快速扫描
-        self.log("=" * 60)
+        self.log("─" * 40)
         self.log("🔍 第一阶段：快速扫描 (只读取前1MB)")
-        self.log("=" * 60)
+        self.log("─" * 40)
         
         start_time = time.time()
         
@@ -281,13 +281,10 @@ class LargeDuplicateChecker:
             return
         
         quick_scan_time = time.time() - start_time
-        self.log(f"✅ 快速扫描完成！耗时: {quick_scan_time:.2f} 秒")
-        self.log(f"📊 快速扫描成功: {quick_scan_success} 个文件")
-        self.log(f"📈 快速扫描统计: 生成了 {len(self.quick_hashes)} 个不同的快速哈希值")
+        self.log(f"✅ 快速扫描完成！耗时: {quick_scan_time:.2f} 秒，成功: {quick_scan_success} 个文件，生成 {len(self.quick_hashes)} 个不同哈希值")
         
         # 分析快速扫描结果，找出可能的重复文件
         self.log("🔍 分析快速扫描结果...")
-        self.log(f"📋 快速哈希分布统计:")
         
         # 统计快速哈希分布
         single_file_hashes = 0
@@ -301,8 +298,7 @@ class LargeDuplicateChecker:
                 duplicate_candidate_hashes += 1
                 total_duplicate_candidates += len(files)
         
-        self.log(f"   ✅ 唯一文件: {single_file_hashes} 个哈希值 (无需验证)")
-        self.log(f"   ⚠️  疑似重复: {duplicate_candidate_hashes} 个哈希值，涉及 {total_duplicate_candidates} 个文件")
+        self.log(f"📋 快速哈希分布: 唯一文件 {single_file_hashes} 个，疑似重复 {duplicate_candidate_hashes} 个哈希值涉及 {total_duplicate_candidates} 个文件")
         
         potential_duplicate_paths = set()
         quick_hash_groups = {}  # 用于记录每个快速哈希对应的文件组
@@ -315,8 +311,7 @@ class LargeDuplicateChecker:
                 potential_duplicate_paths.update(file_paths)
                 quick_hash_groups[quick_hash] = files
                 file_names = [os.path.basename(path) for path in file_paths]
-                self.log(f"⚠️  发现 {len(files)} 个文件具有相同的快速哈希 {quick_hash[:8]}...")
-                self.log(f"   📁 文件列表: {', '.join(file_names)}")
+                self.log(f"⚠️  发现 {len(files)} 个文件具有相同快速哈希 {quick_hash[:8]}...: {', '.join(file_names)}")
         
         if not potential_duplicate_paths:
             self.log("🎉 快速扫描未发现潜在重复文件，无需完整验证！")
@@ -327,10 +322,10 @@ class LargeDuplicateChecker:
                                if path in potential_duplicate_paths]
         
         # 第二阶段：完整验证
-        self.log("=" * 60)
+        self.log("─" * 40)
         self.log(f"🔍 第二阶段：完整验证 ({len(potential_duplicates)} 个文件)")
         self.log("💡 验证原因：这些文件在快速扫描中具有相同的哈希值，需要完整验证以确认是否真正重复")
-        self.log("=" * 60)
+        self.log("─" * 40)
         
         # 显示每个文件的验证原因
         for file_path, file_size in potential_duplicates:
@@ -338,8 +333,7 @@ class LargeDuplicateChecker:
             for quick_hash, files in quick_hash_groups.items():
                 if any(f[0] == file_path for f in files):
                     group_files = [os.path.basename(f[0]) for f in files]
-                    self.log(f"🔍 {os.path.basename(file_path)} -> 与 {len(files)-1} 个文件快速哈希相同 ({quick_hash[:8]}...)")
-                    self.log(f"   📋 同组文件: {', '.join(group_files)}")
+                    self.log(f"🔍 {os.path.basename(file_path)} -> 与 {len(files)-1} 个文件快速哈希相同 ({quick_hash[:8]}...): {', '.join(group_files)}")
                     break
         
         verification_start = time.time()
@@ -370,9 +364,8 @@ class LargeDuplicateChecker:
         verification_time = time.time() - verification_start
         total_time = time.time() - start_time
         
-        self.log(f"✅ 完整验证完成！耗时: {verification_time:.2f} 秒")
-        self.log(f"📊 完整验证成功: {verification_success} 个文件")
-        self.log("=" * 60)
+        self.log(f"✅ 完整验证完成！耗时: {verification_time:.2f} 秒，成功: {verification_success} 个文件")
+        self.log("─" * 40)
         self.log(f"🎉 两阶段处理完成！总耗时: {total_time:.2f} 秒")
         self.log(f"⚡ 性能提升: 只需验证 {len(potential_duplicates)}/{len(unprocessed_files)} 个文件 ({len(potential_duplicates)/len(unprocessed_files)*100:.1f}%)")
         
@@ -507,8 +500,8 @@ class CLHDuplicateChecker:
             "optional": {
                 "custom_directory": ("STRING", {
                     "default": "",
-                    "multiline": False,
-                    "tooltip": "当选择'其他'时，输入自定义目录路径"
+                    "multiline": True,
+                    "tooltip": "当选择'其他'时，输入自定义目录路径（支持多个目录，每行一个）"
                 }),
             }
         }
@@ -554,7 +547,17 @@ class CLHDuplicateChecker:
                 error_msg = "❌ 选择'其他'时必须提供自定义目录路径"
                 return (error_msg, error_msg)
             
-            scan_directory = custom_directory.strip()
+            # 处理多行目录输入，取第一个有效目录
+            directories = [line.strip() for line in custom_directory.strip().split('\n') if line.strip()]
+            if not directories:
+                error_msg = "❌ 选择'其他'时必须提供至少一个有效的目录路径"
+                return (error_msg, error_msg)
+            
+            scan_directory = directories[0]  # 使用第一个目录
+            if len(directories) > 1:
+                # 如果有多个目录，记录日志但只使用第一个
+                print(f"⚠️  检测到多个目录，将使用第一个: {scan_directory}")
+                print(f"   其他目录将被忽略: {', '.join(directories[1:])}")
         
         # 验证目录是否存在
         if not os.path.exists(scan_directory):
