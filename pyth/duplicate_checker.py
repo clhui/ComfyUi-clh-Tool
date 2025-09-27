@@ -600,14 +600,8 @@ class CLHDuplicateChecker:
             
             # 生成报告
             report_lines = []
-            report_lines.append(f"🔍 重复文件检查报告")
-            report_lines.append(f"📁 扫描目录: {scan_directory}")
-            report_lines.append(f"📂 目录类型: {directory_type}")
-            report_lines.append(f"📏 最小文件大小: {checker.format_size(checker.min_size_bytes)}")
-            report_lines.append(f"🎯 仅模型文件: {'是' if model_files_only else '否'}")
-            report_lines.append(f"📊 扫描文件总数: {len(large_files)}")
-            report_lines.append(f"🔄 处理文件数: {checker.processed_files}")
-            report_lines.append(f"💾 处理数据量: {checker.format_size(checker.total_bytes_processed)}")
+            report_lines.append(f"🔍 重复文件检查报告 - 📁 {scan_directory} | 📂 {directory_type} | 📏 {checker.format_size(checker.min_size_bytes)}+ | 🎯 {'仅模型' if model_files_only else '全部文件'}")
+            report_lines.append(f"📊 扫描统计: {len(large_files)} 个文件 | 处理 {checker.processed_files} 个 | 数据量 {checker.format_size(checker.total_bytes_processed)}")
             report_lines.append("")
             
             if duplicates:
@@ -623,10 +617,7 @@ class CLHDuplicateChecker:
                     total_duplicate_size += duplicate_size
                     total_duplicate_files += len(files)
                     
-                    report_lines.append(f"📦 重复组 {i} (MD5: {hash_val[:8]}...)")
-                    report_lines.append(f"   📏 文件大小: {checker.format_size(files_size)}")
-                    report_lines.append(f"   🔢 重复数量: {len(files)} 个文件")
-                    report_lines.append(f"   💾 可节省空间: {checker.format_size(duplicate_size)}")
+                    report_lines.append(f"📦 重复组 {i} (MD5: {hash_val[:8]}...) - 📏 {checker.format_size(files_size)} | 🔢 {len(files)} 个文件 | 💾 可节省 {checker.format_size(duplicate_size)}")
                     report_lines.append("   📄 文件列表:")
                     
                     for file_path, file_size in files:
@@ -645,9 +636,7 @@ class CLHDuplicateChecker:
                     report_lines.append("")
                 
                 report_lines.append("=" * 50)
-                report_lines.append(f"📊 总计:")
-                report_lines.append(f"   🔢 重复文件总数: {total_duplicate_files}")
-                report_lines.append(f"   💾 可节省总空间: {checker.format_size(total_duplicate_size)}")
+                report_lines.append(f"📊 总计: {total_duplicate_files} 个重复文件 | 💾 可节省总空间: {checker.format_size(total_duplicate_size)}")
                 
             else:
                 report_lines.append("✅ 未发现重复文件")
