@@ -18,6 +18,7 @@ node_list = [
     "math_expression",
     "echart",
     "show_text",
+    "duplicate_checker",
 ]
 
 NODE_CLASS_MAPPINGS = {}
