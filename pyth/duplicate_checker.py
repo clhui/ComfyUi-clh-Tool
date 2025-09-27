@@ -117,8 +117,8 @@ class LargeDuplicateChecker:
                 # 只读取文件开头的指定大小
                 chunk = f.read(min(sample_size, file_size))
                 hash_md5.update(chunk)
-                # 将文件大小也加入哈希，确保不同大小的文件不会有相同的快速哈希
-                hash_md5.update(str(file_size).encode())
+                # 注意：不包含文件大小在快速哈希中，这样内容相同的文件会有相同的快速哈希
+                # 文件大小的比较会在后续的完整验证阶段进行
                 
             return hash_md5.hexdigest()
         except (IOError, OSError) as e:
@@ -456,7 +456,7 @@ class CLHDuplicateChecker:
     def INPUT_TYPES(cls):
         # 获取ComfyUI根目录
         try:
-            comfyui_root = os.path.dirname(os.path.dirname(os.path.dirname(folder_paths.base_path)))
+            comfyui_root = folder_paths.base_path
         except:
             comfyui_root = os.getcwd()
         
@@ -524,7 +524,7 @@ class CLHDuplicateChecker:
         
         # 根据directory_type确定扫描目录
         try:
-            comfyui_root = os.path.dirname(os.path.dirname(os.path.dirname(folder_paths.base_path)))
+            comfyui_root = folder_paths.base_path
         except:
             comfyui_root = os.getcwd()
         
