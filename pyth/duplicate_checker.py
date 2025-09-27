@@ -442,7 +442,7 @@ class LargeDuplicateChecker:
             pass  # 忽略清理错误
 
 
-class CLHDuplicateChecker:
+class CLHDuplicateChecker_clh:
     """ComfyUI 大文件重复检查节点"""
     
     @classmethod
@@ -506,11 +506,15 @@ class CLHDuplicateChecker:
             }
         }
     
+    @classmethod
+    def VALIDATE_INPUTS(cls, **kwargs):
+        return True
+    
     RETURN_TYPES = ("STRING", "STRING")
     RETURN_NAMES = ("duplicate_report", "log_output")
     FUNCTION = "check_duplicates"
     CATEGORY = "CLH Tool"
-    DESCRIPTION = "检查指定目录下的重复大文件，支持模型文件过滤和多线程处理"
+    DESCRIPTION = "检查指定目录下的重复大模型文件，支持模型文件过滤和多线程处理"
     
     def check_duplicates(self, min_size_mb, model_files_only, max_workers, directory_type, custom_directory=""):
         """执行重复文件检查"""
@@ -600,12 +604,12 @@ class CLHDuplicateChecker:
             
             # 生成报告
             report_lines = []
-            report_lines.append(f"🔍 重复文件检查报告 - 📁 {scan_directory} | 📂 {directory_type} | 📏 {checker.format_size(checker.min_size_bytes)}+ | 🎯 {'仅模型' if model_files_only else '全部文件'}")
+            report_lines.append(f"🔍 重复大模型文件检测报告 - 📁 {scan_directory} | 📂 {directory_type} | 📏 {checker.format_size(checker.min_size_bytes)}+ | 🎯 {'仅模型' if model_files_only else '全部文件'}")
             report_lines.append(f"📊 扫描统计: {len(large_files)} 个文件 | 处理 {checker.processed_files} 个 | 数据量 {checker.format_size(checker.total_bytes_processed)}")
             report_lines.append("")
             
             if duplicates:
-                report_lines.append(f"⚠️  发现 {len(duplicates)} 组重复文件:")
+                report_lines.append(f"⚠️  发现 {len(duplicates)} 组重复大模型文件:")
                 report_lines.append("")
                 
                 total_duplicate_size = 0
@@ -636,10 +640,10 @@ class CLHDuplicateChecker:
                     report_lines.append("")
                 
                 report_lines.append("=" * 50)
-                report_lines.append(f"📊 总计: {total_duplicate_files} 个重复文件 | 💾 可节省总空间: {checker.format_size(total_duplicate_size)}")
+                report_lines.append(f"📊 总计: {total_duplicate_files} 个重复大模型文件 | 💾 可节省总空间: {checker.format_size(total_duplicate_size)}")
                 
             else:
-                report_lines.append("✅ 未发现重复文件")
+                report_lines.append("✅ 未发现重复大模型文件")
             
             report = "\n".join(report_lines)
             log_output = "\n".join(checker.log_messages)
@@ -653,10 +657,10 @@ class CLHDuplicateChecker:
 
 # 节点类映射
 NODE_CLASS_MAPPINGS = {
-    "CLHDuplicateChecker": CLHDuplicateChecker,
+    "duplicate_checker_clh": CLHDuplicateChecker_clh,
 }
 
 # 节点显示名称映射
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "CLHDuplicateChecker": "CLH 重复文件检查器",
+    "duplicate_checker_clh": "CLH 重复大模型文件检测",
 }
